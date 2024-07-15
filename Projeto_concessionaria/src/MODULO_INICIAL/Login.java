@@ -4,13 +4,24 @@
  */
 package MODULO_INICIAL;
 
-public class Login extends javax.swing.JFrame {
+import UTILS.DataBase;
+import javax.swing.JOptionPane;
 
+public class Login extends javax.swing.JFrame {
+    
+    DataBase db = new DataBase();
+    
     public Login() {
         initComponents();
     }
 
-    
+    private void checkLogin(){
+        if(db.getConnection()){
+            System.out.println("Conexão realizada!!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -127,7 +138,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        checkLogin();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
