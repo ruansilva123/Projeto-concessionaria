@@ -1,0 +1,147 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema projeto_concessionaria
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema projeto_concessionaria
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `projeto_concessionaria` DEFAULT CHARACTER SET utf8 ;
+-- -----------------------------------------------------
+-- Schema projeto_java
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema projeto_java
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `projeto_java` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
+USE `projeto_concessionaria` ;
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`Cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`Cliente` (
+  `id_cliente` INT NOT NULL AUTO_INCREMENT,
+  `nome_cliente` VARCHAR(70) NOT NULL,
+  `cpf_cliente` VARCHAR(14) NOT NULL,
+  `cnh_cliente` VARCHAR(9) NULL,
+  PRIMARY KEY (`id_cliente`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`usuario` (
+  `id_usuario` INT NOT NULL AUTO_INCREMENT,
+  `senha_usuario` VARCHAR(70) NOT NULL,
+  `email_usuario` VARCHAR(70) NOT NULL,
+  `nome_usuario` VARCHAR(70) NOT NULL,
+  `eh_gerente` BINARY(0) NULL,
+  `eh_vendedor` BINARY(0) NULL,
+  PRIMARY KEY (`id_usuario`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`Venda`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`Venda` (
+  `id_venda` INT NOT NULL AUTO_INCREMENT,
+  `data_venda` DATE NOT NULL,
+  `comissao_venda` DECIMAL(4,2) NULL,
+  `Cliente_id_cliente` INT NOT NULL,
+  `usuario_id_usuario` INT NOT NULL,
+  PRIMARY KEY (`id_venda`, `Cliente_id_cliente`, `usuario_id_usuario`),
+  INDEX `fk_Venda_Cliente1_idx` (`Cliente_id_cliente` ASC) VISIBLE,
+  INDEX `fk_Venda_usuario1_idx` (`usuario_id_usuario` ASC) VISIBLE,
+  CONSTRAINT `fk_Venda_Cliente1`
+    FOREIGN KEY (`Cliente_id_cliente`)
+    REFERENCES `projeto_concessionaria`.`Cliente` (`id_cliente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Venda_usuario1`
+    FOREIGN KEY (`usuario_id_usuario`)
+    REFERENCES `projeto_concessionaria`.`usuario` (`id_usuario`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`Fornecedor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`Fornecedor` (
+  `id_fornecedor` INT NOT NULL AUTO_INCREMENT,
+  `nome_fornecedor` VARCHAR(45) NOT NULL,
+  `email_fornedor` VARCHAR(70) NOT NULL,
+  PRIMARY KEY (`id_fornecedor`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`Produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`Produto` (
+  `id_produto` INT NOT NULL AUTO_INCREMENT,
+  `nome_produto` VARCHAR(70) NOT NULL,
+  `marca_produto` VARCHAR(70) NOT NULL,
+  `valor_unitario_produto` DECIMAL(13,2) NOT NULL,
+  `Fornecedor_id_fornecedor` INT NOT NULL,
+  PRIMARY KEY (`id_produto`, `Fornecedor_id_fornecedor`),
+  INDEX `fk_Produto_Fornecedor1_idx` (`Fornecedor_id_fornecedor` ASC) VISIBLE,
+  CONSTRAINT `fk_Produto_Fornecedor1`
+    FOREIGN KEY (`Fornecedor_id_fornecedor`)
+    REFERENCES `projeto_concessionaria`.`Fornecedor` (`id_fornecedor`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`Venda_has_Produto`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`Venda_has_Produto` (
+  `id_Venda_has_Produtocol` INT NOT NULL AUTO_INCREMENT,
+  `Venda_id_venda` INT NOT NULL,
+  `Produto_id_produto` INT NOT NULL,
+  `quantidade` INT NOT NULL,
+  PRIMARY KEY (`id_Venda_has_Produtocol`, `Venda_id_venda`, `Produto_id_produto`),
+  INDEX `fk_Venda_has_Produto_Produto1_idx` (`Produto_id_produto` ASC) VISIBLE,
+  INDEX `fk_Venda_has_Produto_Venda_idx` (`Venda_id_venda` ASC) VISIBLE,
+  CONSTRAINT `fk_Venda_has_Produto_Venda`
+    FOREIGN KEY (`Venda_id_venda`)
+    REFERENCES `projeto_concessionaria`.`Venda` (`id_venda`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Venda_has_Produto_Produto1`
+    FOREIGN KEY (`Produto_id_produto`)
+    REFERENCES `projeto_concessionaria`.`Produto` (`id_produto`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `projeto_concessionaria`.`Estoque`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`Estoque` (
+  `id_estoque` INT NOT NULL AUTO_INCREMENT,
+  `quantidade_estoque` INT NOT NULL,
+  `quantidade_minima` INT NOT NULL,
+  `qauntidade_maxima` INT NULL,
+  `Produto_id_produto` INT NOT NULL,
+  PRIMARY KEY (`id_estoque`, `Produto_id_produto`),
+  INDEX `fk_Estoque_Produto1_idx` (`Produto_id_produto` ASC) VISIBLE,
+  CONSTRAINT `fk_Estoque_Produto1`
+    FOREIGN KEY (`Produto_id_produto`)
+    REFERENCES `projeto_concessionaria`.`Produto` (`id_produto`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
