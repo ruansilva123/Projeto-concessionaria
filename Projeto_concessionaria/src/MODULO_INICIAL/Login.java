@@ -6,6 +6,9 @@ package MODULO_INICIAL;
 
 import UTILS.DataBase;
 import javax.swing.JOptionPane;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Login extends javax.swing.JFrame {
     
@@ -13,11 +16,32 @@ public class Login extends javax.swing.JFrame {
     
     public Login() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     private void checkLogin(){
         if(db.getConnection()){
-            System.out.println("Conexão realizada!!");
+            try{
+                String query = "select id_usuario, eh_gerente, eh_vendedor from usuario where email_usuario = ? and senha_usuario = ?";
+                PreparedStatement selectIdStmt = db.connection.prepareStatement(query);
+                selectIdStmt.setString(1, jTEmail.getText());
+                String password = new String(jPassword.getPassword());
+                selectIdStmt.setString(2, password);
+                
+                ResultSet result = selectIdStmt.executeQuery();
+                if(result.next()){
+                    this.dispose();
+                    Home home = new Home(result.getInt("id_usuario"), result.getByte("eh_gerente"), result.getByte("eh_vendedor"));
+                    home.setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Usuário não encontrado!");
+                }
+                
+                selectIdStmt.close();
+                db.connection.close();
+            }catch(SQLException error){
+                JOptionPane.showMessageDialog(null, "Erro: "+error.toString());
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
         }
@@ -33,8 +57,8 @@ public class Login extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        jTEmail = new javax.swing.JTextField();
+        jPassword = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,9 +86,9 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTEmail.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jPasswordField1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPassword.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -75,8 +99,8 @@ public class Login extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
+                    .addComponent(jTEmail)
+                    .addComponent(jPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE))
                 .addGap(39, 39, 39))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -96,11 +120,11 @@ public class Login extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(50, 50, 50))
@@ -183,7 +207,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JPasswordField jPassword;
+    private javax.swing.JTextField jTEmail;
     // End of variables declaration//GEN-END:variables
 }
