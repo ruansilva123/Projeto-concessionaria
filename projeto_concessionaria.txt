@@ -7,20 +7,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema projeto_concessionaria
 -- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema projeto_concessionaria
--- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS `projeto_concessionaria` DEFAULT CHARACTER SET utf8 ;
--- -----------------------------------------------------
--- Schema projeto_java
--- -----------------------------------------------------
-
--- -----------------------------------------------------
--- Schema projeto_java
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `projeto_java` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci ;
-USE `projeto_concessionaria` ;
 
 -- -----------------------------------------------------
 -- Table `projeto_concessionaria`.`Cliente`
@@ -35,15 +22,15 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `projeto_concessionaria`.`usuario`
+-- Table `projeto_concessionaria`.`Usuario`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`usuario` (
   `id_usuario` INT NOT NULL AUTO_INCREMENT,
   `senha_usuario` VARCHAR(70) NOT NULL,
   `email_usuario` VARCHAR(70) NOT NULL,
   `nome_usuario` VARCHAR(70) NOT NULL,
-  `eh_gerente` BINARY(0) NULL,
-  `eh_vendedor` BINARY(0) NULL,
+  `eh_gerente` BIT NULL,
+  `eh_vendedor` BIT NULL,
   PRIMARY KEY (`id_usuario`))
 ENGINE = InnoDB;
 
