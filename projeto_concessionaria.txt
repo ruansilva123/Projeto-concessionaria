@@ -29,8 +29,8 @@ CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`usuario` (
   `senha_usuario` VARCHAR(70) NOT NULL,
   `email_usuario` VARCHAR(70) NOT NULL,
   `nome_usuario` VARCHAR(70) NOT NULL,
-  `eh_gerente` BINARY(0) NULL,
-  `eh_vendedor` BINARY(0) NULL,
+  `eh_gerente` BIT NULL,
+  `eh_vendedor` BIT NULL,
   PRIMARY KEY (`id_usuario`))
 ENGINE = InnoDB;
 
