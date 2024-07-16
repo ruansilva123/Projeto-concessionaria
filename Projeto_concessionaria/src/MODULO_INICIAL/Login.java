@@ -22,7 +22,7 @@ public class Login extends javax.swing.JFrame {
     private void checkLogin(){
         if(db.getConnection()){
             try{
-                String query = "select id_usuario from usuario where email_usuario = ? and senha_usuario = ?";
+                String query = "select id_usuario, eh_gerente, eh_vendedor from usuario where email_usuario = ? and senha_usuario = ?";
                 PreparedStatement selectIdStmt = db.connection.prepareStatement(query);
                 selectIdStmt.setString(1, jTEmail.getText());
                 String password = new String(jPassword.getPassword());
@@ -31,7 +31,7 @@ public class Login extends javax.swing.JFrame {
                 ResultSet result = selectIdStmt.executeQuery();
                 if(result.next()){
                     this.dispose();
-                    Home home = new Home(result.getInt("id_usuario"));
+                    Home home = new Home(result.getInt("id_usuario"), result.getByte("eh_gerente"), result.getByte("eh_vendedor"));
                     home.setVisible(true);
                 }else{
                     JOptionPane.showMessageDialog(null, "Usuário não encontrado!");
