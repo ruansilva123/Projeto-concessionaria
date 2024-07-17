@@ -12,16 +12,15 @@ import CRUD.UsuarioDialog;
 import CRUD.VendasDialog;
 import javax.swing.JOptionPane;
 import UTILS.LogoutSystem;
+import UTILS.User;
+import UTILS.AlterPage;
+
 
 public class Home extends javax.swing.JFrame {
-    private int id_user;
-    private int is_manager;
-    private int is_seller;
+    private User user;
     
-    public Home(int id_user, int is_manager, int is_seller) {
-        this.id_user = id_user;
-        this.is_manager = is_manager;
-        this.is_seller = is_seller;
+    public Home(User userDatas) {
+        this.user = userDatas;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -210,63 +209,58 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        if(is_manager == 1){
+        /*if(is_manager == 1){
             Produto produto = new Produto();
             this.dispose();
             produto.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }
+        }*/
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        if(is_seller == 1){
-            VendasDialog vendas = new VendasDialog(this, false);
-            this.dispose();
-            vendas.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }
+        VendasDialog vendas = new VendasDialog(this, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, vendas);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        if(is_seller == 1){
+        /*if(is_seller == 1){
             ClienteDialog cliente = new ClienteDialog(this, false);
             this.dispose();
             cliente.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }
+        }*/
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        if(is_manager == 1){
+        /*if(is_manager == 1){
             EstoqueDialog estoque = new EstoqueDialog(this, false);
             this.dispose();
             estoque.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }
+        }*/
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        if(is_manager == 1){
+        /*if(is_manager == 1){
             FornecedorDialog fornecedor = new FornecedorDialog(this, false);
             this.dispose();
             fornecedor.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }
+        }*/
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        if(is_manager == 1){
+        /*if(is_manager == 1){
             UsuarioDialog usuarios = new UsuarioDialog(this, false);
             this.dispose();
             usuarios.setVisible(true);
         }else{
             JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }
+        }*/
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
@@ -303,7 +297,8 @@ public class Home extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Home(0,0,0).setVisible(true);
+                User user = new User(0,0,0,"No User");
+                new Home(user).setVisible(true);
             }
         });
     }
