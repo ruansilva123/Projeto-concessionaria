@@ -277,14 +277,11 @@
             </Component>
           </SubComponents>
         </Container>
-<<<<<<< HEAD
-=======
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Vendas"/>
           </Properties>
         </Component>
->>>>>>> 12979f0c5065758a6e50460cea3f3793fba2545f
       </SubComponents>
     </Container>
   </SubComponents>
