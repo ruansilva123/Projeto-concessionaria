@@ -13,9 +13,11 @@ import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import UTILS.User;
 
 
 public class Produto extends javax.swing.JFrame {
+    private User user;
     
     DataBase bd = new DataBase();
     Connection connection;
@@ -84,7 +86,8 @@ public class Produto extends javax.swing.JFrame {
 
     
     
-    public Produto() {
+    public Produto(User user) {
+        this.user = user;
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
@@ -590,7 +593,8 @@ public class Produto extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Produto().setVisible(true);
+                User user = new User(0,0,0,"No User");
+                new Produto(user).setVisible(true);
             }
         });
     }

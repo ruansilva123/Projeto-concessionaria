@@ -4,13 +4,7 @@
  */
 package MODULO_INICIAL;
 
-import CRUD.ClienteDialog;
-import CRUD.EstoqueDialog;
-import CRUD.FornecedorDialog;
-import CRUD.Produto;
-import CRUD.UsuarioDialog;
-import CRUD.VendasDialog;
-import javax.swing.JOptionPane;
+import CRUD.*;
 import UTILS.LogoutSystem;
 import UTILS.User;
 import UTILS.AlterPage;
@@ -209,13 +203,8 @@ public class Home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        /*if(is_manager == 1){
-            Produto produto = new Produto();
-            this.dispose();
-            produto.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }*/
+        Produto produto = new Produto(user);
+        AlterPage.alterPage(user.getIsManager(), this, produto);
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
@@ -224,43 +213,23 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        /*if(is_seller == 1){
-            ClienteDialog cliente = new ClienteDialog(this, false);
-            this.dispose();
-            cliente.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }*/
+        ClienteDialog cliente =  new ClienteDialog(this, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, cliente);
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        /*if(is_manager == 1){
-            EstoqueDialog estoque = new EstoqueDialog(this, false);
-            this.dispose();
-            estoque.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }*/
+        EstoqueDialog estoque = new EstoqueDialog(this, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, estoque);
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        /*if(is_manager == 1){
-            FornecedorDialog fornecedor = new FornecedorDialog(this, false);
-            this.dispose();
-            fornecedor.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }*/
+        FornecedorDialog fornecedor = new FornecedorDialog(this, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, fornecedor);
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        /*if(is_manager == 1){
-            UsuarioDialog usuarios = new UsuarioDialog(this, false);
-            this.dispose();
-            usuarios.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Você não possui permissão para acessar esta aba!");
-        }*/
+        UsuarioDialog usuario = new UsuarioDialog(this, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, usuario);
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
