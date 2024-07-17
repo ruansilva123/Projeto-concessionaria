@@ -4,13 +4,7 @@
  */
 package MODULO_INICIAL;
 
-import CRUD.ClienteDialog;
-import CRUD.EstoqueDialog;
-import CRUD.FornecedorDialog;
-import CRUD.Produto;
-import CRUD.UsuarioDialog;
-import CRUD.VendasDialog;
-import javax.swing.JOptionPane;
+import CRUD.*;
 import UTILS.LogoutSystem;
 import UTILS.User;
 import UTILS.AlterPage;
@@ -209,31 +203,37 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel16MouseClicked
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        Produto produto = new Produto(user);
+        AlterPage.alterPage(user.getIsManager(), this, produto);
+    }//GEN-LAST:event_jLabel3MouseClicked
 
-    }//GEN-LAST:event_jLabel16MouseClicked
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        VendasDialog vendas = new VendasDialog(this, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+    }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        ClienteDialog cliente =  new ClienteDialog(this, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, cliente);
+    }//GEN-LAST:event_jLabel5MouseClicked
 
-    }//GEN-LAST:event_jLabel17MouseClicked
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        EstoqueDialog estoque = new EstoqueDialog(this, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, estoque);
+    }//GEN-LAST:event_jLabel4MouseClicked
 
-    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel20MouseClicked
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        FornecedorDialog fornecedor = new FornecedorDialog(this, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, fornecedor);
+    }//GEN-LAST:event_jLabel6MouseClicked
 
-    }//GEN-LAST:event_jLabel20MouseClicked
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        UsuarioDialog usuario = new UsuarioDialog(this, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, usuario);
+    }//GEN-LAST:event_jLabel7MouseClicked
 
-    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel21MouseClicked
-
-    }//GEN-LAST:event_jLabel21MouseClicked
-
-    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel22MouseClicked
-
-    }//GEN-LAST:event_jLabel22MouseClicked
-
-    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
-
-    }//GEN-LAST:event_jLabel23MouseClicked
-
-    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MouseClicked
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel24MouseClicked
 

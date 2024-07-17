@@ -5,12 +5,15 @@
 package CRUD;
 
 import UTILS.LogoutSystem;
+import UTILS.User;
 
 
 public class EstoqueDialog extends javax.swing.JDialog {
+    private User user;
 
-    public EstoqueDialog(java.awt.Frame parent, boolean modal) {
+    public EstoqueDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -277,7 +280,8 @@ public class EstoqueDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                EstoqueDialog dialog = new EstoqueDialog(new javax.swing.JFrame(), true);
+                User user = new User(0,0,0,"No User");
+                EstoqueDialog dialog = new EstoqueDialog(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

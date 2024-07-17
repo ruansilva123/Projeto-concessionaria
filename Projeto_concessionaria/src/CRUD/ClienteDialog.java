@@ -9,14 +9,17 @@ import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import UTILS.LogoutSystem;
+import UTILS.User;
 
 
 public class ClienteDialog extends javax.swing.JDialog {
+    private User user;
 
     DataBase db = new DataBase();
     
-    public ClienteDialog(java.awt.Frame parent, boolean modal) {
+    public ClienteDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -358,7 +361,8 @@ public class ClienteDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ClienteDialog dialog = new ClienteDialog(new javax.swing.JFrame(), true);
+                User user = new User(0,0,0,"No User");
+                ClienteDialog dialog = new ClienteDialog(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

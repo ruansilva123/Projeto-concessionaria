@@ -9,13 +9,16 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import UTILS.LogoutSystem;
+import UTILS.User;
 
 public class FornecedorDialog extends javax.swing.JDialog {
+    private User user;
 
     DataBase db = new DataBase();
     
-    public FornecedorDialog(java.awt.Frame parent, boolean modal) {
+    public FornecedorDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -304,7 +307,8 @@ public class FornecedorDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                FornecedorDialog dialog = new FornecedorDialog(new javax.swing.JFrame(), true);
+                User user = new User(0,0,0,"No User");
+                FornecedorDialog dialog = new FornecedorDialog(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
