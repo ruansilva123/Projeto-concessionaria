@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import UTILS.User;
 
 public class Login extends javax.swing.JFrame {
     
@@ -22,7 +23,7 @@ public class Login extends javax.swing.JFrame {
     private void checkLogin(){
         if(db.getConnection()){
             try{
-                String query = "select id_usuario, eh_gerente, eh_vendedor from usuario where email_usuario = ? and senha_usuario = ?";
+                String query = "select id_usuario, eh_gerente, eh_vendedor, nome_usuario from usuario where email_usuario = ? and senha_usuario = ?";
                 PreparedStatement selectIdStmt = db.connection.prepareStatement(query);
                 selectIdStmt.setString(1, jTEmail.getText());
                 String password = new String(jPassword.getPassword());
@@ -30,8 +31,9 @@ public class Login extends javax.swing.JFrame {
                 
                 ResultSet result = selectIdStmt.executeQuery();
                 if(result.next()){
+                    User user = new User(result.getInt("id_usuario"), result.getByte("eh_gerente"), result.getByte("eh_vendedor"), result.getString("nome_usuario"));
                     this.dispose();
-                    Home home = new Home(result.getInt("id_usuario"), result.getByte("eh_gerente"), result.getByte("eh_vendedor"));
+                    Home home = new Home(user);
                     home.setVisible(true);
                 }else{
                     JOptionPane.showMessageDialog(null, "Usuário não encontrado!");

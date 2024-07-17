@@ -5,12 +5,15 @@
 package CRUD;
 
 import UTILS.LogoutSystem;
+import UTILS.User;
 
         
 public class VendasDialog extends javax.swing.JDialog {
+    private User user;
 
-    public VendasDialog(java.awt.Frame parent, boolean modal) {
+    public VendasDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -453,7 +456,8 @@ public class VendasDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                VendasDialog dialog = new VendasDialog(new javax.swing.JFrame(), true);
+                User user = new User(0,0,0,"No User");
+                VendasDialog dialog = new VendasDialog(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
