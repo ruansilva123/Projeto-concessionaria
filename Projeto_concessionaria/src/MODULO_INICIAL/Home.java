@@ -8,6 +8,7 @@ import CRUD.*;
 import UTILS.LogoutSystem;
 import UTILS.User;
 import UTILS.AlterPage;
+import CRUD.VendasDialog;
 
 
 public class Home extends javax.swing.JFrame {
@@ -145,12 +146,13 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(jLabel22)
                             .addComponent(jLabel23)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jLabel15)))
-                .addContainerGap(82, Short.MAX_VALUE))
+                        .addGap(66, 66, 66)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jLabel15)))))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,9 +235,9 @@ public class Home extends javax.swing.JFrame {
         AlterPage.alterPage(user.getIsManager(), this, usuario);
     }//GEN-LAST:event_jLabel7MouseClicked
 
-    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {                                      
         LogoutSystem.logoutSystem(this);
-    }//GEN-LAST:event_jLabel24MouseClicked
+    }                                     
 
     /**
      * @param args the command line arguments
