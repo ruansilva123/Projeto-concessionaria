@@ -125,6 +125,7 @@ public class Produto extends javax.swing.JFrame {
         jTKm = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
         jTValorUnit = new javax.swing.JTextField();
+        jTFornecedor = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabelaProdutos = new javax.swing.JTable();
@@ -136,6 +137,7 @@ public class Produto extends javax.swing.JFrame {
         jTNome = new javax.swing.JTextField();
         jTextField9 = new javax.swing.JTextField();
         jButton17 = new javax.swing.JButton();
+        jButton13 = new javax.swing.JButton();
         jTAno = new javax.swing.JTextField();
         jButton14 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -214,6 +216,12 @@ public class Produto extends javax.swing.JFrame {
         jTValorUnit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTValorUnit.setBorder(null);
         jPanel1.add(jTValorUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 330, 240, -1));
+
+        jTFornecedor.setBackground(new java.awt.Color(235, 235, 235));
+        jTFornecedor.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTFornecedor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTFornecedor.setBorder(null);
+        jPanel1.add(jTFornecedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 450, 240, -1));
 
         jTabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -334,6 +342,17 @@ public class Produto extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton17, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, -1, 30));
+
+        jButton13.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton13.setForeground(new java.awt.Color(102, 102, 102));
+        jButton13.setText("Fornecedor:");
+        jButton13.setBorder(null);
+        jButton13.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton13ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 420, -1, 30));
 
         jTAno.setBackground(new java.awt.Color(235, 235, 235));
         jTAno.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
@@ -559,6 +578,10 @@ public class Produto extends javax.swing.JFrame {
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel18MouseClicked
 
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton13ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -600,6 +623,7 @@ public class Produto extends javax.swing.JFrame {
     private javax.swing.JButton jBMaisOpcoes;
     private javax.swing.JButton jBSalvar;
     private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton17;
     private javax.swing.JButton jButton5;
@@ -621,6 +645,7 @@ public class Produto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTAno;
+    private javax.swing.JTextField jTFornecedor;
     private javax.swing.JTextField jTKm;
     private javax.swing.JTextField jTMarca;
     private javax.swing.JTextField jTNome;
