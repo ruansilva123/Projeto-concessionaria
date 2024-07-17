@@ -4,47 +4,108 @@
  */
 package CRUD;
 import UTILS.DataBase;
+import UTILS.LogoutSystem;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 
 public class Produto extends javax.swing.JFrame {
     
     DataBase bd = new DataBase();
+    Connection connection;
+    PreparedStatement getProdutos;
+    ResultSet rs;
     
-    public void initTable(){
-        if(bd.getConnection()){
-            try{
-                String query = "select * from produto";
-                PreparedStatement getProdutos = bd.connection.prepareStatement(query);
-                ResultSet rs = getProdutos.executeQuery();
+    public void initTable() {
+        if (bd.getConnection()) {
+            try {
+                connection = bd.connection;
+                String query = "SELECT * FROM produto";
+                getProdutos = connection.prepareStatement(query);
+                rs = getProdutos.executeQuery();
                 DefaultTableModel tabela = (DefaultTableModel) jTabelaProdutos.getModel();
                 tabela.setNumRows(0);
-                while(rs.next()){
+                while (rs.next()) {
                     tabela.addRow(new Object[]{
                         rs.getString("id_produto"),
                         rs.getString("nome_produto"),
                         rs.getString("marca_produto"),
                         rs.getString("valor_unitario_produto"),
-                        rs.getString("Km"),
-                        rs.getString("Ano"),
+                        rs.getString("km_produto"),
+                        rs.getString("ano_produto"),
                     });
                 }
-                getProdutos.close();
-                bd.connection.close();
-            } catch(SQLException erro) {
-                System.out.println("Erro ao pesquisar: "+erro.toString());
+            } catch (SQLException erro) {
+                System.out.println("Erro ao pesquisar: " + erro.toString());
             }
         }
     }
+    
+    private void SalvarProduto() {
+        if (bd.getConnection()) {
+            try {
+                String checkFornecedorQuery = "SELECT COUNT(*) FROM fornecedor WHERE id_fornecedor = ?";
+                PreparedStatement checkFornecedorStatement = bd.connection.prepareStatement(checkFornecedorQuery);
+                checkFornecedorStatement.setString(1, jTFornecedor.getText());
+                ResultSet rs = checkFornecedorStatement.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    String query = "INSERT INTO produto (nome_produto, marca_produto, valor_unitario_produto, "
+                                 + "Fornecedor_id_fornecedor, km_produto, ano_produto) VALUES (?, ?, ?, ?, ?, ?)";
+
+                    PreparedStatement insertProductStatement = bd.connection.prepareStatement(query);
+                    insertProductStatement.setString(1, jTNome.getText());
+                    insertProductStatement.setString(2, jTMarca.getText());
+                    insertProductStatement.setString(3, jTValorUnit.getText());
+                    insertProductStatement.setString(4, jTFornecedor.getText());
+                    insertProductStatement.setString(5, jTKm.getText());
+                    insertProductStatement.setString(6, jTAno.getText());
+
+                    insertProductStatement.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Dados gravados com sucesso");
+
+                    insertProductStatement.close();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erro: Fornecedor não encontrado");
+                }
+                rs.close();
+                checkFornecedorStatement.close();
+                bd.connection.close();
+            } catch (SQLException erro) {
+                JOptionPane.showMessageDialog(null, "Erro de gravação no banco: " + erro.toString());
+            }
+        }
+    }
+
+    
     
     public Produto() {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
         initTable();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeResources();
+                System.exit(0);
+            }
+        });
+     }
+    
+    private void closeResources() {
+        try {
+            if (rs != null) rs.close();
+            if (getProdutos != null) getProdutos.close();
+            if (connection != null) connection.close();
+        } catch (SQLException e) {
+            System.out.println("Erro ao fechar recursos: " + e.toString());
+        }
     }
 
     /**
@@ -64,7 +125,6 @@ public class Produto extends javax.swing.JFrame {
         jTKm = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
         jTValorUnit = new javax.swing.JTextField();
-        jTFornecedor = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabelaProdutos = new javax.swing.JTable();
@@ -76,15 +136,18 @@ public class Produto extends javax.swing.JFrame {
         jTNome = new javax.swing.JTextField();
         jTextField9 = new javax.swing.JTextField();
         jButton17 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
+        jTAno = new javax.swing.JTextField();
+        jButton14 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jTextField6 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel18 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -105,13 +168,13 @@ public class Produto extends javax.swing.JFrame {
                 jButton5ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 290, -1, -1));
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, -1, -1));
 
         jTMarca.setBackground(new java.awt.Color(235, 235, 235));
         jTMarca.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTMarca.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTMarca.setBorder(null);
-        jPanel1.add(jTMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 320, 240, -1));
+        jPanel1.add(jTMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, 240, -1));
 
         jButton6.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jButton6.setForeground(new java.awt.Color(102, 102, 102));
@@ -122,13 +185,18 @@ public class Produto extends javax.swing.JFrame {
                 jButton6ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 410, -1, 30));
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, -1, 30));
 
         jTKm.setBackground(new java.awt.Color(235, 235, 235));
         jTKm.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTKm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTKm.setBorder(null);
-        jPanel1.add(jTKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 440, 240, -1));
+        jTKm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTKmActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jTKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 240, -1));
 
         jButton8.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jButton8.setForeground(new java.awt.Color(102, 102, 102));
@@ -139,19 +207,13 @@ public class Produto extends javax.swing.JFrame {
                 jButton8ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 350, -1, 30));
+        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, -1, 30));
 
         jTValorUnit.setBackground(new java.awt.Color(235, 235, 235));
         jTValorUnit.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTValorUnit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTValorUnit.setBorder(null);
-        jPanel1.add(jTValorUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 380, 240, -1));
-
-        jTFornecedor.setBackground(new java.awt.Color(235, 235, 235));
-        jTFornecedor.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTFornecedor.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTFornecedor.setBorder(null);
-        jPanel1.add(jTFornecedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 500, 240, -1));
+        jPanel1.add(jTValorUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 330, 240, -1));
 
         jTabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -232,7 +294,7 @@ public class Produto extends javax.swing.JFrame {
                 jButton12ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 230, -1, 30));
+        jPanel1.add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 180, -1, 30));
 
         jPanel5.setBackground(new java.awt.Color(10, 60, 150));
         jPanel5.setForeground(new java.awt.Color(0, 153, 255));
@@ -254,7 +316,7 @@ public class Produto extends javax.swing.JFrame {
         jTNome.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTNome.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTNome.setBorder(null);
-        jPanel1.add(jTNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 240, -1));
+        jPanel1.add(jTNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, 240, -1));
 
         jTextField9.setBackground(new java.awt.Color(235, 235, 235));
         jTextField9.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
@@ -273,133 +335,165 @@ public class Produto extends javax.swing.JFrame {
         });
         jPanel1.add(jButton17, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, -1, 30));
 
-        jButton13.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jButton13.setForeground(new java.awt.Color(102, 102, 102));
-        jButton13.setText("Fornecedor:");
-        jButton13.setBorder(null);
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        jTAno.setBackground(new java.awt.Color(235, 235, 235));
+        jTAno.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTAno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTAno.setBorder(null);
+        jPanel1.add(jTAno, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 510, 240, -1));
+
+        jButton14.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton14.setForeground(new java.awt.Color(102, 102, 102));
+        jButton14.setText("Ano:");
+        jButton14.setBorder(null);
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                jButton14ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton13, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 470, -1, 30));
+        jPanel1.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, -1, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 1280, 810));
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 51));
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 51));
-        jButton1.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(153, 153, 153));
-        jButton1.setText("Vendas");
-        jButton1.setBorder(null);
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Produtos");
 
-        jButton3.setBackground(new java.awt.Color(0, 0, 51));
-        jButton3.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(153, 153, 153));
-        jButton3.setText("Clientes");
-        jButton3.setBorder(null);
-
-        jButton4.setBackground(new java.awt.Color(0, 0, 51));
-        jButton4.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(153, 153, 153));
-        jButton4.setText("Estoque");
-        jButton4.setBorder(null);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel2.setText("Vendas");
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
             }
         });
 
-        jButton7.setBackground(new java.awt.Color(0, 0, 51));
-        jButton7.setFont(new java.awt.Font("Yu Gothic Medium", 1, 14)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("Produtos");
-        jButton7.setBorder(null);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel3.setText("Home");
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
             }
         });
 
-        jButton10.setBackground(new java.awt.Color(0, 0, 51));
-        jButton10.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jButton10.setForeground(new java.awt.Color(153, 153, 153));
-        jButton10.setText("Home");
-        jButton10.setBorder(null);
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel4.setText("Estoque");
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
             }
         });
 
-        jButton11.setBackground(new java.awt.Color(0, 0, 51));
-        jButton11.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jButton11.setForeground(new java.awt.Color(153, 153, 153));
-        jButton11.setText("Fornecedor");
-        jButton11.setBorder(null);
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel5.setText("Clientes");
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel5MouseClicked(evt);
             }
         });
 
-        jTextField6.setBackground(new java.awt.Color(0, 153, 255));
-        jTextField6.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTextField6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField6.setBorder(null);
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel6.setText("Fornecedor");
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel6MouseClicked(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel7.setText("Usuários");
+        jLabel7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel7MouseClicked(evt);
+            }
+        });
+
+        jPanel6.setBackground(new java.awt.Color(0, 153, 255));
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
+
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMGS/sair-do-usuario.png"))); // NOI18N
+        jLabel18.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel18.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel18MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel18)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                             .addGap(68, 68, 68)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButton11)
-                                .addComponent(jButton10)
-                                .addComponent(jButton4)
-                                .addComponent(jButton3)
-                                .addComponent(jButton1))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jButton7)))
-                .addContainerGap(243, Short.MAX_VALUE))
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel3)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel7)))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(55, 55, 55)
+                            .addComponent(jLabel1))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(47, 47, 47)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(61, 127, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(121, 121, 121)
-                .addComponent(jButton7)
+                .addGap(119, 119, 119)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 9, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addComponent(jButton10)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addComponent(jLabel4)
                 .addGap(18, 18, 18)
-                .addComponent(jButton11)
-                .addContainerGap(415, Short.MAX_VALUE))
+                .addComponent(jLabel6)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
+                .addComponent(jLabel18)
+                .addGap(26, 26, 26))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 810));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
@@ -409,10 +503,6 @@ public class Produto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
-
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
@@ -420,14 +510,6 @@ public class Produto extends javax.swing.JFrame {
     private void jBMaisOpcoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMaisOpcoesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBMaisOpcoesActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
-
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
@@ -437,13 +519,45 @@ public class Produto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton17ActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton13ActionPerformed
-
     private void jBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarActionPerformed
         SalvarProduto();        // TODO add your handling code here:
     }//GEN-LAST:event_jBSalvarActionPerformed
+
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton14ActionPerformed
+
+    private void jTKmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTKmActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTKmActionPerformed
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        
+    }//GEN-LAST:event_jLabel2MouseClicked
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+       
+    }//GEN-LAST:event_jLabel4MouseClicked
+
+    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        
+    }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+       
+    }//GEN-LAST:event_jLabel7MouseClicked
+
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+        LogoutSystem.logoutSystem(this);
+    }//GEN-LAST:event_jLabel18MouseClicked
 
     /**
      * @param args the command line arguments
@@ -485,31 +599,36 @@ public class Produto extends javax.swing.JFrame {
     private javax.swing.JButton JBCancelar;
     private javax.swing.JButton jBMaisOpcoes;
     private javax.swing.JButton jBSalvar;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTFornecedor;
+    private javax.swing.JTextField jTAno;
     private javax.swing.JTextField jTKm;
     private javax.swing.JTextField jTMarca;
     private javax.swing.JTextField jTNome;
     private javax.swing.JTextField jTValorUnit;
     private javax.swing.JTable jTabelaProdutos;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
+
+   
+    
 }
