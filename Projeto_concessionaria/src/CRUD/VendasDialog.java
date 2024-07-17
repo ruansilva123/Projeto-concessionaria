@@ -9,9 +9,6 @@ import MODULO_INICIAL.Home;
 import UTILS.LogoutSystem;
 import UTILS.User;
 import UTILS.AlterPage;
-import java.awt.Frame;
-import java.awt.Window;
-import javax.swing.SwingUtilities;
 
         
 public class VendasDialog extends javax.swing.JDialog {
@@ -330,8 +327,4 @@ public class VendasDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     // End of variables declaration//GEN-END:variables
-
-    private Frame getFrame(Window ancestor) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
