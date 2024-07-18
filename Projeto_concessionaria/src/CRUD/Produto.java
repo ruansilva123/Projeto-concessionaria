@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package CRUD;
-import CRUD.*;
 import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import UTILS.LogoutSystem;
@@ -22,7 +21,6 @@ import UTILS.ClasseProduto;
 
 public class Produto extends javax.swing.JFrame {
     private User user;
-    
     DataBase bd = new DataBase();
     Connection connection;
     ResultSet rs;
@@ -71,6 +69,10 @@ public class Produto extends javax.swing.JFrame {
             produto.getKmProduto(),
             produto.getAnoProduto()
         });
+        System.out.println(tabela.getRowCount());
+        int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+        System.out.println(numTableRows);
+        tabela.setRowCount(numTableRows);
     }
     
     private void initTable() {
@@ -109,7 +111,7 @@ public class Produto extends javax.swing.JFrame {
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
-        initTable();
+        setTable();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -183,13 +185,13 @@ public class Produto extends javax.swing.JFrame {
         jTMarca.setBackground(new java.awt.Color(235, 235, 235));
         jTMarca.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTMarca.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTMarca.setBorder(null);
+        jTMarca.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(jTMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, 240, -1));
 
         jTKm.setBackground(new java.awt.Color(235, 235, 235));
         jTKm.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTKm.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTKm.setBorder(null);
+        jTKm.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTKm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTKmActionPerformed(evt);
@@ -200,8 +202,10 @@ public class Produto extends javax.swing.JFrame {
         jTValorUnit.setBackground(new java.awt.Color(235, 235, 235));
         jTValorUnit.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTValorUnit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTValorUnit.setBorder(null);
+        jTValorUnit.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(jTValorUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, 240, -1));
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jTabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -236,16 +240,16 @@ public class Produto extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLMaisOpcoes)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(28, 28, 28)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLMaisOpcoes)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 170, 610, 510));
@@ -288,13 +292,13 @@ public class Produto extends javax.swing.JFrame {
         jTNome.setBackground(new java.awt.Color(235, 235, 235));
         jTNome.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTNome.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTNome.setBorder(null);
+        jTNome.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(jTNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 240, -1));
 
         jTAno.setBackground(new java.awt.Color(235, 235, 235));
         jTAno.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTAno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTAno.setBorder(null);
+        jTAno.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.add(jTAno, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, 240, -1));
 
         jPanel7.setForeground(new java.awt.Color(0, 153, 255));
