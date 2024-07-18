@@ -4,12 +4,16 @@
  */
 package CRUD;
 
+import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import UTILS.LogoutSystem;
 import UTILS.User;
+import CRUD.*;
+import UTILS.AlterPage;
+
 
 public class UsuarioDialog extends javax.swing.JDialog {
     private User user;
@@ -206,6 +210,9 @@ public class UsuarioDialog extends javax.swing.JDialog {
                         .addGap(99, 99, 99)
                         .addComponent(jLabel21))
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(98, 98, 98)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -213,16 +220,11 @@ public class UsuarioDialog extends javax.swing.JDialog {
                                 .addComponent(jLabel22))
                             .addComponent(jLabel23)
                             .addComponent(jLabel17)
-                            .addComponent(jLabel25))))
-                .addContainerGap(95, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel25)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addGap(91, 91, 91)
                         .addComponent(jLabel16)))
-                .addGap(76, 76, 76))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,31 +322,38 @@ public class UsuarioDialog extends javax.swing.JDialog {
         registerUser();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        Home home = new Home(user);
+        this.dispose();
+        home.setVisible(true);
+    }//GEN-LAST:event_jLabel4MouseClicked
 
-    }//GEN-LAST:event_jLabel17MouseClicked
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        VendasDialog vendas = new VendasDialog(null, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+    }//GEN-LAST:event_jLabel5MouseClicked
 
-    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel21MouseClicked
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        Produto produto = new Produto(user);
+        AlterPage.alterPage(user.getIsManager(), this, produto);
+    }//GEN-LAST:event_jLabel6MouseClicked
 
-    }//GEN-LAST:event_jLabel21MouseClicked
+    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        ClienteDialog cliente = new ClienteDialog(null, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, cliente);
+    }//GEN-LAST:event_jLabel7MouseClicked
 
-    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel22MouseClicked
+    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        EstoqueDialog estoque = new EstoqueDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, estoque);
+    }//GEN-LAST:event_jLabel9MouseClicked
 
-    }//GEN-LAST:event_jLabel22MouseClicked
+    private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+        FornecedorDialog fornecedor = new FornecedorDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, fornecedor);
+    }//GEN-LAST:event_jLabel10MouseClicked
 
-    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
-
-    }//GEN-LAST:event_jLabel23MouseClicked
-
-    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MouseClicked
-
-    }//GEN-LAST:event_jLabel24MouseClicked
-
-    private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel25MouseClicked
-
-    }//GEN-LAST:event_jLabel25MouseClicked
-
-    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel18MouseClicked
 
