@@ -5,13 +5,14 @@
         <group>
             <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/MODULO_INICIAL/Home.java</file>
             <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/EstoqueDialog.java</file>
-            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/ClienteDialog.java</file>
             <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/Produto.java</file>
-            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/UsuarioDialog.java</file>
+            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/ClienteDialog.java</file>
             <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/FornecedorDialog.java</file>
+            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/UsuarioDialog.java</file>
             <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/MODULO_INICIAL/Login.java</file>
+            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/UTILS/AlterPage.java</file>
+            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/UTILS/User.java</file>
             <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/CRUD/VendasDialog.java</file>
-            <file>file:/C:/Users/sir7jvl/Documents/GitHub/Projeto-concessionaria/Projeto_concessionaria/src/UTILS/DataBase.java</file>
         </group>
     </open-files>
 </project-private>
