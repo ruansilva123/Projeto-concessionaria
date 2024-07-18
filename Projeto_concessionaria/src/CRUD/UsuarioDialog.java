@@ -277,10 +277,16 @@ public class UsuarioDialog extends javax.swing.JDialog {
             .addGap(0, 10, Short.MAX_VALUE)
         );
 
+        jTextField9.setEditable(false);
         jTextField9.setBackground(new java.awt.Color(235, 235, 235));
         jTextField9.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTextField9.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField9.setBorder(null);
+        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField9ActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(102, 102, 102));
@@ -403,7 +409,7 @@ public class UsuarioDialog extends javax.swing.JDialog {
         AlterPage.alterPage(user.getIsManager(), this, fornecedor);
     }//GEN-LAST:event_jLabel10MouseClicked
 
-    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {                                      
         LogoutSystem.logoutSystem(this);
     }                                     
 
