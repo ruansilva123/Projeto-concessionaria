@@ -8,7 +8,6 @@ import CRUD.*;
 import UTILS.LogoutSystem;
 import UTILS.User;
 import UTILS.AlterPage;
-import CRUD.VendasDialog;
 
 
 public class Home extends javax.swing.JFrame {
@@ -146,13 +145,12 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(jLabel22)
                             .addComponent(jLabel23)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addComponent(jLabel15)))))
-                .addContainerGap(84, Short.MAX_VALUE))
+                        .addGap(68, 68, 68)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel15)))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,37 +203,37 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         Produto produto = new Produto(user);
         AlterPage.alterPage(user.getIsManager(), this, produto);
     }//GEN-LAST:event_jLabel3MouseClicked
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+    private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         VendasDialog vendas = new VendasDialog(this, false, user);
         AlterPage.alterPage(user.getIsSeller(), this, vendas);
     }//GEN-LAST:event_jLabel2MouseClicked
 
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         ClienteDialog cliente =  new ClienteDialog(this, false, user);
         AlterPage.alterPage(user.getIsSeller(), this, cliente);
     }//GEN-LAST:event_jLabel5MouseClicked
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void jLabel20MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         EstoqueDialog estoque = new EstoqueDialog(this, false, user);
         AlterPage.alterPage(user.getIsManager(), this, estoque);
     }//GEN-LAST:event_jLabel4MouseClicked
 
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         FornecedorDialog fornecedor = new FornecedorDialog(this, false, user);
         AlterPage.alterPage(user.getIsManager(), this, fornecedor);
     }//GEN-LAST:event_jLabel6MouseClicked
 
-    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         UsuarioDialog usuario = new UsuarioDialog(this, false, user);
         AlterPage.alterPage(user.getIsManager(), this, usuario);
     }//GEN-LAST:event_jLabel7MouseClicked
 
-    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {                                      
+    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {                                      
         LogoutSystem.logoutSystem(this);
     }                                     
 
@@ -248,7 +246,7 @@ public class Home extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+        /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -264,7 +262,7 @@ public class Home extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Home.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+        //</editor-fold>*/
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
