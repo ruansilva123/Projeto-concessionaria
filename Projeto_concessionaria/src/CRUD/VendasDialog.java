@@ -4,7 +4,6 @@
  */
 package CRUD;
 
-import CRUD.*;
 import MODULO_INICIAL.Home;
 import UTILS.LogoutSystem;
 import UTILS.User;
