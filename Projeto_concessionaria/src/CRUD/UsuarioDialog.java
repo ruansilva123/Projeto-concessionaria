@@ -322,42 +322,38 @@ public class UsuarioDialog extends javax.swing.JDialog {
         registerUser();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         Home home = new Home(user);
         this.dispose();
         home.setVisible(true);
     }//GEN-LAST:event_jLabel4MouseClicked
 
-    private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         VendasDialog vendas = new VendasDialog(null, false, user);
         AlterPage.alterPage(user.getIsSeller(), this, vendas);
     }//GEN-LAST:event_jLabel5MouseClicked
 
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         Produto produto = new Produto(user);
         AlterPage.alterPage(user.getIsManager(), this, produto);
     }//GEN-LAST:event_jLabel6MouseClicked
 
-    private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
         ClienteDialog cliente = new ClienteDialog(null, false, user);
         AlterPage.alterPage(user.getIsSeller(), this, cliente);
     }//GEN-LAST:event_jLabel7MouseClicked
 
-    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MouseClicked
-
-    }//GEN-LAST:event_jLabel24MouseClicked
-
-    private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         EstoqueDialog estoque = new EstoqueDialog(null, false, user);
         AlterPage.alterPage(user.getIsManager(), this, estoque);
     }//GEN-LAST:event_jLabel9MouseClicked
 
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
+    private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         FornecedorDialog fornecedor = new FornecedorDialog(null, false, user);
         AlterPage.alterPage(user.getIsManager(), this, fornecedor);
     }//GEN-LAST:event_jLabel10MouseClicked
 
-    private void jLabel11MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
+    private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel11MouseClicked
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel18MouseClicked
 
