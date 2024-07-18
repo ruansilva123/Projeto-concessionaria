@@ -4,12 +4,16 @@
  */
 package CRUD;
 
+import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import UTILS.LogoutSystem;
 import UTILS.User;
+import CRUD.*;
+import UTILS.AlterPage;
+
 
 public class FornecedorDialog extends javax.swing.JDialog {
     private User user;
@@ -184,22 +188,22 @@ public class FornecedorDialog extends javax.swing.JDialog {
                         .addGap(89, 89, 89)
                         .addComponent(jLabel25))
                     .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel16)
+                                .addGap(15, 15, 15))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
                             .addComponent(jLabel17)
                             .addComponent(jLabel23)
                             .addComponent(jLabel22)
-                            .addComponent(jLabel24)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(80, 80, 80)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(jLabel16)
-                                .addGap(15, 15, 15)))))
-                .addContainerGap(82, Short.MAX_VALUE))
+                            .addComponent(jLabel24))))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,29 +253,36 @@ public class FornecedorDialog extends javax.swing.JDialog {
         registerSupplier();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel17MouseClicked
+    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        VendasDialog vendas = new VendasDialog(null, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+    }//GEN-LAST:event_jLabel4MouseClicked
 
-    }//GEN-LAST:event_jLabel17MouseClicked
+    private void jLabel17MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
+        Produto produto = new Produto(user);
+        AlterPage.alterPage(user.getIsManager(), this, produto);
+    }//GEN-LAST:event_jLabel5MouseClicked
 
-    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel21MouseClicked
+    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        EstoqueDialog estoque = new EstoqueDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, estoque);
+    }//GEN-LAST:event_jLabel6MouseClicked
 
-    }//GEN-LAST:event_jLabel21MouseClicked
+    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
+        ClienteDialog cliente = new ClienteDialog(null, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, cliente);
+    }//GEN-LAST:event_jLabel7MouseClicked
 
-    private void jLabel22MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel22MouseClicked
+    private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
+        UsuarioDialog usuario = new UsuarioDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, usuario);
+    }//GEN-LAST:event_jLabel9MouseClicked
 
-    }//GEN-LAST:event_jLabel22MouseClicked
-
-    private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel23MouseClicked
-
-    }//GEN-LAST:event_jLabel23MouseClicked
-
-    private void jLabel24MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MouseClicked
-
-    }//GEN-LAST:event_jLabel24MouseClicked
-
-    private void jLabel25MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel25MouseClicked
-
-    }//GEN-LAST:event_jLabel25MouseClicked
+    private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        Home home = new Home(user);
+        this.dispose();
+        home.setVisible(true);
+    }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
         LogoutSystem.logoutSystem(this);
@@ -323,17 +334,26 @@ public class FornecedorDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    // private javax.swing.JLabel jLabel11;
+    // private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    // private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    // private javax.swing.JLabel jLabel4;
+    // private javax.swing.JLabel jLabel5;
+    // private javax.swing.JLabel jLabel6;
+    // private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
+    // private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
+    // private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JTextField jTEmail;
     private javax.swing.JTextField jTName;
