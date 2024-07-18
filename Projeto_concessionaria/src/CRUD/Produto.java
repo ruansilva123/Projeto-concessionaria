@@ -673,8 +673,5 @@ public class Produto extends javax.swing.JFrame {
     private javax.swing.JTextField jTValorUnit;
     private javax.swing.JTable jTabelaProdutos;
     private javax.swing.JTextField jTextField9;
-    // End of variables declaration//GEN-END:variables
-
-   
-    
+    // End of variables declaration//GEN-END:variables    
 }
