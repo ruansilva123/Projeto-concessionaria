@@ -140,29 +140,28 @@ public class Produto extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        jButton5 = new javax.swing.JButton();
         jTMarca = new javax.swing.JTextField();
+        jButton6 = new javax.swing.JButton();
         jTKm = new javax.swing.JTextField();
+        jButton8 = new javax.swing.JButton();
         jTValorUnit = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabelaProdutos = new javax.swing.JTable();
-        jLMaisOpcoes = new javax.swing.JLabel();
+        jBMaisOpcoes = new javax.swing.JButton();
         JBCancelar = new javax.swing.JButton();
         jBSalvar = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jTNome = new javax.swing.JTextField();
+        jTextField9 = new javax.swing.JTextField();
+        jButton17 = new javax.swing.JButton();
         jTAno = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLNome = new javax.swing.JLabel();
-        jLMarca = new javax.swing.JLabel();
-        jLValorUnitario = new javax.swing.JLabel();
-        jLKm = new javax.swing.JLabel();
-        jLAno = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
+        jButton14 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -180,11 +179,33 @@ public class Produto extends javax.swing.JFrame {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1482, 226, -1, -1));
 
+        jButton5.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(102, 102, 102));
+        jButton5.setText("Marca:");
+        jButton5.setBorder(null);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, -1, -1));
+
         jTMarca.setBackground(new java.awt.Color(235, 235, 235));
         jTMarca.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTMarca.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTMarca.setBorder(null);
-        jPanel1.add(jTMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, 240, -1));
+        jPanel1.add(jTMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 310, 240, -1));
+
+        jButton6.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(102, 102, 102));
+        jButton6.setText("Km:");
+        jButton6.setBorder(null);
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 400, -1, 30));
 
         jTKm.setBackground(new java.awt.Color(235, 235, 235));
         jTKm.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
@@ -195,13 +216,24 @@ public class Produto extends javax.swing.JFrame {
                 jTKmActionPerformed(evt);
             }
         });
-        jPanel1.add(jTKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 420, 240, -1));
+        jPanel1.add(jTKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 430, 240, -1));
+
+        jButton8.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(102, 102, 102));
+        jButton8.setText("Valor Unitario:");
+        jButton8.setBorder(null);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 340, -1, 30));
 
         jTValorUnit.setBackground(new java.awt.Color(235, 235, 235));
         jTValorUnit.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTValorUnit.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTValorUnit.setBorder(null);
-        jPanel1.add(jTValorUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 360, 240, -1));
+        jPanel1.add(jTValorUnit, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 370, 240, -1));
 
         jTabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -217,13 +249,14 @@ public class Produto extends javax.swing.JFrame {
         jTabelaProdutos.setSelectionForeground(new java.awt.Color(102, 102, 102));
         jScrollPane1.setViewportView(jTabelaProdutos);
 
-        jLMaisOpcoes.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLMaisOpcoes.setForeground(new java.awt.Color(102, 102, 102));
-        jLMaisOpcoes.setText("Mais opções:");
-        jLMaisOpcoes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLMaisOpcoes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLMaisOpcoesMouseClicked(evt);
+        jBMaisOpcoes.setBackground(new java.awt.Color(242, 242, 242));
+        jBMaisOpcoes.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jBMaisOpcoes.setForeground(new java.awt.Color(102, 102, 102));
+        jBMaisOpcoes.setText("Mais opções...");
+        jBMaisOpcoes.setBorder(null);
+        jBMaisOpcoes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBMaisOpcoesActionPerformed(evt);
             }
         });
 
@@ -232,10 +265,13 @@ public class Produto extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLMaisOpcoes)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jBMaisOpcoes)))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -243,9 +279,9 @@ public class Produto extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLMaisOpcoes)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jBMaisOpcoes, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 170, 610, 510));
@@ -269,6 +305,17 @@ public class Produto extends javax.swing.JFrame {
         });
         jPanel1.add(jBSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 580, 90, 40));
 
+        jButton12.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton12.setForeground(new java.awt.Color(102, 102, 102));
+        jButton12.setText("Nome:");
+        jButton12.setBorder(null);
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton12, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, -1, 30));
+
         jPanel5.setBackground(new java.awt.Color(10, 60, 150));
         jPanel5.setForeground(new java.awt.Color(0, 153, 255));
 
@@ -289,94 +336,41 @@ public class Produto extends javax.swing.JFrame {
         jTNome.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTNome.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTNome.setBorder(null);
-        jPanel1.add(jTNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, 240, -1));
+        jPanel1.add(jTNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 250, 240, -1));
+
+        jTextField9.setBackground(new java.awt.Color(235, 235, 235));
+        jTextField9.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTextField9.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField9.setBorder(null);
+        jPanel1.add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 770, 10));
+
+        jButton17.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton17.setForeground(new java.awt.Color(102, 102, 102));
+        jButton17.setText("Cadastro de Produtos");
+        jButton17.setBorder(null);
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton17, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, -1, 30));
 
         jTAno.setBackground(new java.awt.Color(235, 235, 235));
         jTAno.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
         jTAno.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTAno.setBorder(null);
-        jPanel1.add(jTAno, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 480, 240, -1));
+        jPanel1.add(jTAno, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 490, 240, -1));
 
-        jLabel8.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel8.setText("Cadastro de Produtos");
-        jLabel8.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel8MouseClicked(evt);
+        jButton14.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jButton14.setForeground(new java.awt.Color(102, 102, 102));
+        jButton14.setText("Ano:");
+        jButton14.setBorder(null);
+        jButton14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton14ActionPerformed(evt);
             }
         });
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 170, -1));
-
-        jLNome.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLNome.setForeground(new java.awt.Color(102, 102, 102));
-        jLNome.setText("Nome:");
-        jLNome.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLNome.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLNomeMouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 210, -1, -1));
-
-        jLMarca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLMarca.setForeground(new java.awt.Color(102, 102, 102));
-        jLMarca.setText("Marca:");
-        jLMarca.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLMarca.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLMarcaMouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLMarca, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 270, -1, -1));
-
-        jLValorUnitario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLValorUnitario.setForeground(new java.awt.Color(102, 102, 102));
-        jLValorUnitario.setText("Valor Unitario:");
-        jLValorUnitario.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLValorUnitario.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLValorUnitarioMouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLValorUnitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 330, -1, -1));
-
-        jLKm.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLKm.setForeground(new java.awt.Color(102, 102, 102));
-        jLKm.setText("Km:");
-        jLKm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLKm.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLKmMouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLKm, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, -1, -1));
-
-        jLAno.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLAno.setForeground(new java.awt.Color(102, 102, 102));
-        jLAno.setText("Ano:");
-        jLAno.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLAno.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLAnoMouseClicked(evt);
-            }
-        });
-        jPanel1.add(jLAno, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 450, -1, -1));
-
-        jPanel7.setForeground(new java.awt.Color(0, 153, 255));
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-
-        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 800, -1));
+        jPanel1.add(jButton14, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 460, -1, 30));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 1220, 720));
 
@@ -474,6 +468,9 @@ public class Produto extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(105, 105, 105)
+                        .addComponent(jLabel18))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -492,9 +489,9 @@ public class Produto extends javax.swing.JFrame {
                                 .addGap(22, 22, 22)
                                 .addComponent(jLabel1))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
-                        .addComponent(jLabel18)))
-                .addContainerGap(76, Short.MAX_VALUE))
+                        .addGap(96, 96, 96)
+                        .addComponent(jLabel3)))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -515,12 +512,12 @@ public class Produto extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 220, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 231, Short.MAX_VALUE)
                 .addComponent(jLabel18)
-                .addGap(55, 55, 55))
+                .addGap(44, 44, 44))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 720));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -645,13 +642,14 @@ public class Produto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBCancelar;
+    private javax.swing.JButton jBMaisOpcoes;
     private javax.swing.JButton jBSalvar;
-    private javax.swing.JLabel jLAno;
-    private javax.swing.JLabel jLKm;
-    private javax.swing.JLabel jLMaisOpcoes;
-    private javax.swing.JLabel jLMarca;
-    private javax.swing.JLabel jLNome;
-    private javax.swing.JLabel jLValorUnitario;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton17;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
@@ -660,14 +658,12 @@ public class Produto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTAno;
     private javax.swing.JTextField jTKm;
@@ -675,6 +671,7 @@ public class Produto extends javax.swing.JFrame {
     private javax.swing.JTextField jTNome;
     private javax.swing.JTextField jTValorUnit;
     private javax.swing.JTable jTabelaProdutos;
+    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 
    
