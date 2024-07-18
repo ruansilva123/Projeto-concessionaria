@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package CRUD;
+
 import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import UTILS.LogoutSystem;
@@ -33,6 +34,7 @@ public class Produto extends javax.swing.JFrame {
                 String query = "SELECT * FROM produto";
                 getProdutos = connection.prepareStatement(query);
                 rs = getProdutos.executeQuery();
+                DefaultTableModel tabela = (DefaultTableModel) jTabelaProdutos.getModel();
                 while (rs.next()){
                     ClasseProduto produto = new ClasseProduto(
                         rs.getInt("id_produto"),
@@ -43,6 +45,12 @@ public class Produto extends javax.swing.JFrame {
                         rs.getInt("ano_produto")
                     );
                     inserirNaTabela(produto);
+                }
+                if (tabela.getRowCount() < 25){
+                    int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+                    tabela.setRowCount(numTableRows);
+                } else {
+                    tabela.setRowCount(tabela.getRowCount());
                 }
                 rs.close();
                 connection.close();
@@ -69,10 +77,6 @@ public class Produto extends javax.swing.JFrame {
             produto.getKmProduto(),
             produto.getAnoProduto()
         });
-        System.out.println(tabela.getRowCount());
-        int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
-        System.out.println(numTableRows);
-        tabela.setRowCount(numTableRows);
     }
     
     private void initTable() {
