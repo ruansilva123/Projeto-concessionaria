@@ -13,19 +13,44 @@ import CRUD.FornecedorDialog;
 import CRUD.UsuarioDialog;
 import CRUD.VendasDialog;
 import UTILS.AlterPage;
+import UTILS.DataBase;
+import javax.swing.JOptionPane;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 
 public class EstoqueDialog extends javax.swing.JDialog {
     private User user;
     private EditaEstoque editaEstoque;
-
+    
+    DataBase db = new DataBase();
+    
     public EstoqueDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
         this.user = user;
         initComponents();
         setLocationRelativeTo(null);
+        resgatarTodosOsProdutos();
     }
-
+    
+    private void resgatarTodosOsProdutos(){
+        if(db.getConnection()){
+            try{
+                String query = "select nome_produto from produto";
+                PreparedStatement selectAllProducts = db.connection.prepareStatement(query);
+                ResultSet result = selectAllProducts.executeQuery();
+                while(result.next()){
+                    System.out.println(result.getString("nome_produto"));
+                }
+                //JOptionPane.showMessageDialog(null, "Nenhum produto cadastrado até o momento!");
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -56,13 +81,13 @@ public class EstoqueDialog extends javax.swing.JDialog {
         jLabel10 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jTEntrada = new javax.swing.JTextField();
+        jTDataEntrada = new javax.swing.JTextField();
+        jTQuantMax = new javax.swing.JTextField();
+        jTQuantMin = new javax.swing.JTextField();
+        jBSalvar = new javax.swing.JButton();
+        jCProduto = new javax.swing.JComboBox<>();
+        jCFornecedor = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -319,37 +344,37 @@ public class EstoqueDialog extends javax.swing.JDialog {
         jLabel14.setForeground(new java.awt.Color(102, 102, 102));
         jLabel14.setText("Quant. mínima:");
 
-        jTextField1.setBackground(new java.awt.Color(235, 235, 235));
-        jTextField1.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTextField1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTEntrada.setBackground(new java.awt.Color(235, 235, 235));
+        jTEntrada.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTEntrada.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jTextField2.setBackground(new java.awt.Color(235, 235, 235));
-        jTextField2.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTextField2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTDataEntrada.setBackground(new java.awt.Color(235, 235, 235));
+        jTDataEntrada.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTDataEntrada.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jTextField3.setBackground(new java.awt.Color(235, 235, 235));
-        jTextField3.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTextField3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTQuantMax.setBackground(new java.awt.Color(235, 235, 235));
+        jTQuantMax.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTQuantMax.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jTextField4.setBackground(new java.awt.Color(235, 235, 235));
-        jTextField4.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTextField4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTQuantMin.setBackground(new java.awt.Color(235, 235, 235));
+        jTQuantMin.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTQuantMin.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton1.setBackground(new java.awt.Color(10, 60, 150));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Salvar");
+        jBSalvar.setBackground(new java.awt.Color(10, 60, 150));
+        jBSalvar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jBSalvar.setForeground(new java.awt.Color(255, 255, 255));
+        jBSalvar.setText("Salvar");
 
-        jComboBox1.setBackground(new java.awt.Color(235, 235, 235));
-        jComboBox1.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jCProduto.setBackground(new java.awt.Color(235, 235, 235));
+        jCProduto.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jCProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jCProdutoActionPerformed(evt);
             }
         });
 
-        jComboBox2.setBackground(new java.awt.Color(235, 235, 235));
-        jComboBox2.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jCFornecedor.setBackground(new java.awt.Color(235, 235, 235));
+        jCFornecedor.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -372,8 +397,8 @@ public class EstoqueDialog extends javax.swing.JDialog {
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel3)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jCFornecedor, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jCProduto, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -381,19 +406,19 @@ public class EstoqueDialog extends javax.swing.JDialog {
                                                     .addGap(69, 69, 69))
                                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(jTQuantMax, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                             .addComponent(jLabel9)
-                                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                            .addComponent(jTEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                 .addComponent(jLabel14)
-                                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jTDataEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addComponent(jLabel10)
-                                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                                .addComponent(jTQuantMin, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(130, 130, 130)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jBSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(76, 76, 76)
                                 .addComponent(jLabel2)))
@@ -422,33 +447,33 @@ public class EstoqueDialog extends javax.swing.JDialog {
                         .addGap(43, 43, 43)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTDataEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jTEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTQuantMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel14)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jTQuantMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(71, 71, 71)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jBSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42))
         );
@@ -506,9 +531,9 @@ public class EstoqueDialog extends javax.swing.JDialog {
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel18MouseClicked
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jCProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCProdutoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jCProdutoActionPerformed
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
         if(editaEstoque == null || !editaEstoque.isDisplayable()){
@@ -563,9 +588,9 @@ public class EstoqueDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton jBSalvar;
+    private javax.swing.JComboBox<String> jCFornecedor;
+    private javax.swing.JComboBox<String> jCProduto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -590,10 +615,10 @@ public class EstoqueDialog extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTDataEntrada;
+    private javax.swing.JTextField jTEntrada;
+    private javax.swing.JTextField jTQuantMax;
+    private javax.swing.JTextField jTQuantMin;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     // End of variables declaration//GEN-END:variables
 }
