@@ -1,0 +1,9 @@
+FEATURES PENDENTES:
+
+	Ruan:
+	- Inserir hash nas senhas de usuários;
+	- Validar usuários existentes ou nulos;
+	- Validar fornecedores existentes ou nulos;
+	- Validas clientes existentes ou nulos;
+	- Read, Update e Delete de usuários, fornecedores, clientes (talvez);
+	- Fazer aba de estoque;
