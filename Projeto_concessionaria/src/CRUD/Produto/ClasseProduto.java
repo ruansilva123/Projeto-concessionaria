@@ -17,9 +17,6 @@ public class ClasseProduto {
     private int kmProduto;
     private int anoProduto;
 
-    // Construtor padrão
-    public ClasseProduto() {}
-
     // Construtor com parâmetros
     public ClasseProduto(int idProduto, String nomeProduto, String marcaProduto, double valorUnitarioProduto, int kmProduto, int anoProduto) {
         this.idProduto = idProduto;

@@ -35,8 +35,9 @@ public class ProdutoDialog extends javax.swing.JDialog {
     PreparedStatement getProdutos;
     
     
-    public ProdutoDialog(java.awt.Frame parent, boolean modal) {
+    public ProdutoDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
@@ -103,30 +104,31 @@ public class ProdutoDialog extends javax.swing.JDialog {
         });
     }
     
-    private void deletar(){
-        if(bd.getConnection()){
-            try{
-                String query = "DELETE FROM produto WHERE id_produto = ?";
-                PreparedStatement smtp = bd.connection.prepareStatement(query);
-                String index = (String)jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
-                System.out.println(index);
-                smtp.setString(1, index);
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o produto? ", "Confirmação ", JOptionPane.YES_NO_OPTION);
-                if(opcao == JOptionPane.YES_OPTION){
-                    int resultado = smtp.executeUpdate();
-                    if(resultado>0){
-                        JOptionPane.showMessageDialog(null, "Produto deletado com sucesso! ");
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Não foi possível remover o Produto! ");
-                    }
-                    smtp.close();
-                    bd.connection.close();
+    private void deletar() {
+    if (bd.getConnection()) {
+        try {
+            String query = "DELETE FROM produto WHERE id_produto = ?";
+            PreparedStatement smtp = bd.connection.prepareStatement(query);
+            Object value = jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
+            String index = value.toString();
+            System.out.println(index);
+            smtp.setString(1, index);
+            int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o produto?", "Confirmação", JOptionPane.YES_NO_OPTION);
+            if (opcao == JOptionPane.YES_OPTION) {
+                int resultado = smtp.executeUpdate();
+                if (resultado > 0) {
+                    JOptionPane.showMessageDialog(null, "Produto deletado com sucesso!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não foi possível remover o Produto!");
                 }
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, "Erro no SQL: "+e.toString());
+                smtp.close();
+                bd.connection.close();
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro no SQL: " + e.toString());
         }
     }
+}
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -651,7 +653,9 @@ public class ProdutoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jBSalvarDialogActionPerformed
 
     private void jBDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeletarActionPerformed
-        deletar();        // TODO add your handling code here:
+        deletar(); 
+        initTable();
+        setTable();
     }//GEN-LAST:event_jBDeletarActionPerformed
 
     private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
@@ -716,7 +720,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true);
+                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
