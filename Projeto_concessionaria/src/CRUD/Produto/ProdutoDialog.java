@@ -103,6 +103,31 @@ public class ProdutoDialog extends javax.swing.JDialog {
         });
     }
     
+    private void deletar(){
+        if(bd.getConnection()){
+            try{
+                String query = "delete from produto where id_produto = ?";
+                PreparedStatement smtp = bd.connection.prepareStatement(query);
+                String index = (String)jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
+                System.out.println(index);
+                smtp.setString(1, index);
+                int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o cliente? ", "Confirmação ", JOptionPane.YES_NO_OPTION);
+                if(opcao == JOptionPane.YES_OPTION){
+                    int resultado = smtp.executeUpdate();
+                    if(resultado>0){
+                        JOptionPane.showMessageDialog(null, "Cliente deletado com sucesso! ");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Não foi possível remover o cliente! ");
+                    }
+                    smtp.close();
+                    bd.connection.close();
+                }
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, "Erro no SQL: "+e.toString());
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
