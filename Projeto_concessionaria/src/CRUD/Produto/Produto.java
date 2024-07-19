@@ -67,12 +67,6 @@ public class Produto extends javax.swing.JFrame {
                     );
                     inserirNaTabela(produto);
                 }
-                if (tabela.getRowCount() < 25){
-                    int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
-                    tabela.setRowCount(numTableRows);
-                } else {
-                    tabela.setRowCount(tabela.getRowCount());
-                }
                 rs.close();
                 connection.close();
             } catch (SQLException erro) {
@@ -98,6 +92,12 @@ public class Produto extends javax.swing.JFrame {
             produto.getKmProduto(),
             produto.getAnoProduto()
         });
+        if (tabela.getRowCount() < 25){
+            int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+            tabela.setRowCount(numTableRows);
+        } else {
+            tabela.setRowCount(tabela.getRowCount());
+        }
     }
     
     private void initTable() {
@@ -595,7 +595,8 @@ public class Produto extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLMaisOpcoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLMaisOpcoesMouseClicked
-        // TODO add your handling code here:
+        ProdutoDialog crudProduto = new ProdutoDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, crudProduto);        // TODO add your handling code here:
     }//GEN-LAST:event_jLMaisOpcoesMouseClicked
 
     private void jLAnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLAnoMouseClicked

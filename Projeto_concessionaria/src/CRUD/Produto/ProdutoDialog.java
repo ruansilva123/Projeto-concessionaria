@@ -7,6 +7,7 @@ package CRUD.Produto;
 import CRUD.ClienteDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.FornecedorDialog;
+import CRUD.Produto.ClasseProduto;
 import CRUD.UsuarioDialog;
 import CRUD.VendasDialog;
 import MODULO_INICIAL.Home;
@@ -22,6 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import UTILS.User;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 /**
  *
  * @author moc3jvl
@@ -33,15 +36,18 @@ public class ProdutoDialog extends javax.swing.JDialog {
     Connection connection;
     ResultSet rs;
     PreparedStatement getProdutos;
+    String editId;
     
     
-    public ProdutoDialog(java.awt.Frame parent, boolean modal) {
+    public ProdutoDialog(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
         setResizable(false);
         setLocationRelativeTo(null);
         initTable();
         setTable();
+        initSearchListener();
     }
 
     
@@ -70,12 +76,6 @@ public class ProdutoDialog extends javax.swing.JDialog {
                     );
                     inserirNaTabela(produto);
                 }
-                if (tabela.getRowCount() < 25){
-                    int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
-                    tabela.setRowCount(numTableRows);
-                } else {
-                    tabela.setRowCount(tabela.getRowCount());
-                }
                 rs.close();
                 connection.close();
             } catch (SQLException erro) {
@@ -101,32 +101,149 @@ public class ProdutoDialog extends javax.swing.JDialog {
             produto.getKmProduto(),
             produto.getAnoProduto()
         });
+        if (tabela.getRowCount() < 25){
+            int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+            tabela.setRowCount(numTableRows);
+        } else {
+            tabela.setRowCount(tabela.getRowCount());
+        }
     }
     
-    private void deletar(){
-        if(bd.getConnection()){
-            try{
-                String query = "delete from produto where id_produto = ?";
+    
+    private void delete() {
+        if (bd.getConnection()) {
+            try {
+                String query = "DELETE FROM produto WHERE id_produto = ?";
                 PreparedStatement smtp = bd.connection.prepareStatement(query);
-                String index = (String)jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
+                Object value = jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
+                String index = value.toString();
                 System.out.println(index);
                 smtp.setString(1, index);
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o cliente? ", "Confirmação ", JOptionPane.YES_NO_OPTION);
-                if(opcao == JOptionPane.YES_OPTION){
+                int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o produto?", "Confirmação", JOptionPane.YES_NO_OPTION);
+                if (opcao == JOptionPane.YES_OPTION) {
                     int resultado = smtp.executeUpdate();
-                    if(resultado>0){
-                        JOptionPane.showMessageDialog(null, "Cliente deletado com sucesso! ");
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Não foi possível remover o cliente! ");
+                    if (resultado > 0) {
+                        JOptionPane.showMessageDialog(null, "Produto deletado com sucesso!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Não foi possível remover o Produto!");
                     }
                     smtp.close();
                     bd.connection.close();
                 }
-            }catch(SQLException e){
-                JOptionPane.showMessageDialog(null, "Erro no SQL: "+e.toString());
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro no SQL: " + e.toString());
             }
         }
     }
+
+
+    private void setEdit(){
+        int selectedRow = jTabelaProdutosDialog.getSelectedRow();
+        if(selectedRow != -1){
+            editId = jTabelaProdutosDialog.getValueAt(selectedRow, 0).toString();
+            jTNomeEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 1).toString());
+            jTMarcaEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 2).toString());
+            jTValorUnitEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 3).toString());
+            jTKmEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 4).toString());
+            jTAnoEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 5).toString()); 
+        }
+    }
+    
+    
+    private void initTableListener(){
+        jTabelaProdutosDialog.addMouseListener(new java.awt.event.MouseAdapter(){
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt){
+                int selectedRow = jTabelaProdutosDialog.getSelectedRow();
+                if(selectedRow != -1){
+                    editId = jTabelaProdutosDialog.getValueAt(selectedRow, 0).toString();
+                    jTNomeEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 1).toString());
+                    jTMarcaEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 2).toString());
+                    jTValorUnitEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 3).toString());
+                    jTKmEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 4).toString());
+                    jTAnoEditar.setText(jTabelaProdutosDialog.getValueAt(selectedRow, 5).toString()); 
+                }
+            }
+        });
+    }
+    
+    
+    private void edit(){
+        if(bd.getConnection()){
+            try{
+                String query = "UPDATE produto SET nome_produto=?, marca_produto=?, valor_unitario_produto=?, "+
+                                "km_produto=?, ano_produto=? WHERE id_produto = ? ";
+                PreparedStatement updateProductStatement = bd.connection.prepareStatement(query);
+                updateProductStatement.setString(1, jTNomeEditar.getText());
+                updateProductStatement.setString(2, jTMarcaEditar.getText());
+                updateProductStatement.setString(3, jTValorUnitEditar.getText());
+                updateProductStatement.setString(4, jTKmEditar.getText());
+                updateProductStatement.setString(5, jTAnoEditar.getText());
+                updateProductStatement.setString(6, editId);
+                updateProductStatement.executeUpdate();
+                JOptionPane.showMessageDialog(null, "Dados atualizados! ");
+                updateProductStatement.close();
+                bd.connection.close();
+            }catch(SQLException e){
+                JOptionPane.showMessageDialog(null, "Erro no SQL: "+e.getMessage());
+            }
+        }
+    }
+    
+    
+    private void initSearchListener() {
+        jTPesquisaDialog.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+        });
+    }
+    
+    
+    private void pesquisar() {
+        if (bd.getConnection()) {
+            try {
+                connection = bd.connection;
+                String pesquisa = jTPesquisaDialog.getText();
+                String query = "SELECT * FROM produto WHERE nome_produto LIKE ? OR marca_produto LIKE ?";
+                PreparedStatement searchStatement = connection.prepareStatement(query);
+                searchStatement.setString(1, "%" + pesquisa + "%");
+                searchStatement.setString(2, "%" + pesquisa + "%");
+                rs = searchStatement.executeQuery();
+                DefaultTableModel tabela = (DefaultTableModel) jTabelaProdutosDialog.getModel();
+                initTable();
+                while (rs.next()) {
+                    ClasseProduto produto = new ClasseProduto(
+                        rs.getInt("id_produto"),
+                        rs.getString("nome_produto"),
+                        rs.getString("marca_produto"),
+                        rs.getDouble("valor_unitario_produto"),
+                        rs.getInt("km_produto"),
+                        rs.getInt("ano_produto")
+                    );
+                    inserirNaTabela(produto);
+                }
+                rs.close();
+                searchStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao pesquisar: " + e.toString());
+            }
+        }
+    }
+    
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -146,7 +263,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
         jLMarca = new javax.swing.JLabel();
         jTMarcaEditar = new javax.swing.JTextField();
         jLValorUnit = new javax.swing.JLabel();
-        jTValorUnitREditar = new javax.swing.JTextField();
+        jTValorUnitEditar = new javax.swing.JTextField();
         jLKm = new javax.swing.JLabel();
         jTKmEditar = new javax.swing.JTextField();
         jLAno = new javax.swing.JLabel();
@@ -229,10 +346,10 @@ public class ProdutoDialog extends javax.swing.JDialog {
             }
         });
 
-        jTValorUnitREditar.setBackground(new java.awt.Color(235, 235, 235));
-        jTValorUnitREditar.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
-        jTValorUnitREditar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTValorUnitREditar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTValorUnitEditar.setBackground(new java.awt.Color(235, 235, 235));
+        jTValorUnitEditar.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTValorUnitEditar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTValorUnitEditar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLKm.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jLKm.setForeground(new java.awt.Color(102, 102, 102));
@@ -299,31 +416,31 @@ public class ProdutoDialog extends javax.swing.JDialog {
                 .addComponent(jLCampoDeEdicao)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(35, Short.MAX_VALUE)
+                .addContainerGap(34, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(jBSalvarDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(99, 99, 99))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTNomeEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLNome)
                             .addComponent(jLMarca)
                             .addComponent(jTMarcaEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTValorUnitREditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTValorUnitEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLValorUnit)
                             .addComponent(jLKm)
                             .addComponent(jTKmEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLAno)
                             .addComponent(jTAnoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jBSalvarDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(99, 99, 99))))
+                        .addGap(32, 32, 32))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addComponent(jLCampoDeEdicao)
-                .addGap(47, 47, 47)
+                .addGap(56, 56, 56)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -339,7 +456,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addComponent(jTValorUnitREditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTValorUnitEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLValorUnit))
                 .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,7 +470,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
                         .addComponent(jTAnoEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jBSalvarDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -647,15 +764,20 @@ public class ProdutoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabelPesquisarMouseClicked
 
     private void jBSalvarDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarDialogActionPerformed
-        // TODO add your handling code here:
+        edit();
+        initTable();
+        setTable();
     }//GEN-LAST:event_jBSalvarDialogActionPerformed
 
     private void jBDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeletarActionPerformed
-        // TODO add your handling code here:
+        delete(); 
+        initTable();
+        setTable();
     }//GEN-LAST:event_jBDeletarActionPerformed
 
     private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed
-        // TODO add your handling code here:
+        setEdit();
+        initTableListener();
     }//GEN-LAST:event_jBEditarActionPerformed
 
     private void jLNomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLNomeMouseClicked
@@ -686,6 +808,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLCampoDeEdicaoMouseClicked
 
+    
     /**
      * @param args the command line arguments
      */
@@ -716,7 +839,8 @@ public class ProdutoDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true);
+                User user = new User(0,0,0,"No User");
+                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -761,7 +885,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
     private javax.swing.JTextField jTNome1;
     private javax.swing.JTextField jTNomeEditar;
     private javax.swing.JTextField jTPesquisaDialog;
-    private javax.swing.JTextField jTValorUnitREditar;
+    private javax.swing.JTextField jTValorUnitEditar;
     private javax.swing.JTable jTabelaProdutosDialog;
     // End of variables declaration//GEN-END:variables
 }
