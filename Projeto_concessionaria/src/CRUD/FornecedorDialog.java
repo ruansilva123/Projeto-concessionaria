@@ -4,6 +4,7 @@
  */
 package CRUD;
 
+import CRUD.Venda.VendasDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.Produto.Produto;
 import MODULO_INICIAL.Home;

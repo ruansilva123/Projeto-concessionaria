@@ -8,7 +8,7 @@ import CRUD.ClienteDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.FornecedorDialog;
 import CRUD.UsuarioDialog;
-import CRUD.VendasDialog;
+import CRUD.Venda.VendasDialog;
 import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import UTILS.LogoutSystem;

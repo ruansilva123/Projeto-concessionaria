@@ -12,7 +12,7 @@ import CRUD.*;
 import CRUD.ClienteDialog;
 import CRUD.FornecedorDialog;
 import CRUD.UsuarioDialog;
-import CRUD.VendasDialog;
+import CRUD.Venda.VendasDialog;
 import UTILS.AlterPage;
 
 
