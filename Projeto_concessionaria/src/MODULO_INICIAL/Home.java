@@ -4,6 +4,7 @@
  */
 package MODULO_INICIAL;
 
+import CRUD.Estoque.EstoqueDialog;
 import CRUD.Produto.Produto;
 import CRUD.*;
 import UTILS.LogoutSystem;

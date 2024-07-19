@@ -5,7 +5,7 @@
 package CRUD.Produto;
 
 import CRUD.ClienteDialog;
-import CRUD.EstoqueDialog;
+import CRUD.Estoque.EstoqueDialog;
 import CRUD.FornecedorDialog;
 import CRUD.UsuarioDialog;
 import CRUD.VendasDialog;
