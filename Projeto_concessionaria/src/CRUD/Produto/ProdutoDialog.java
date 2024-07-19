@@ -76,12 +76,6 @@ public class ProdutoDialog extends javax.swing.JDialog {
                     );
                     inserirNaTabela(produto);
                 }
-                /* if (tabela.getRowCount() < 25){
-                    int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
-                    tabela.setRowCount(numTableRows);
-                } else {
-                    tabela.setRowCount(tabela.getRowCount());
-                } */
                 rs.close();
                 connection.close();
             } catch (SQLException erro) {
@@ -845,7 +839,8 @@ public class ProdutoDialog extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true, null);
+                User user = new User(0,0,0,"No User");
+                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

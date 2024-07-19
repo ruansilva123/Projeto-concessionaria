@@ -36,8 +36,8 @@ public class UsuarioDialog extends javax.swing.JDialog {
                 String query = "insert usuario(nome_usuario, email_usuario, senha_usuario, eh_gerente, eh_vendedor) "
                         + "values (?,?,?,?,?)";
                 PreparedStatement updateUserStmt = db.connection.prepareStatement(query);
-                updateUserStmt.setString(1, jTName.getText());
-                updateUserStmt.setString(2, jTEmail.getText());
+                updateUserStmt.setString(1, jTNomeEditar.getText());
+                updateUserStmt.setString(2, jTNomeEditar1.getText());
                 String password = new String(jPassword.getPassword());
                 updateUserStmt.setString(3, password);
                 
@@ -86,15 +86,15 @@ public class UsuarioDialog extends javax.swing.JDialog {
         jPanel5 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTEmail = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPassword = new javax.swing.JPasswordField();
         jRSeller = new javax.swing.JRadioButton();
         jRManager = new javax.swing.JRadioButton();
         jButton1 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
+        jTNomeEditar = new javax.swing.JTextField();
+        jTNomeEditar1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -271,6 +271,8 @@ public class UsuarioDialog extends javax.swing.JDialog {
             .addGap(0, 10, Short.MAX_VALUE)
         );
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         jLabel1.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
         jLabel1.setText("Nome:");
@@ -282,6 +284,9 @@ public class UsuarioDialog extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 102));
         jLabel3.setText("Senha:");
+
+        jPassword.setBackground(new java.awt.Color(235, 235, 235));
+        jPassword.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jRSeller.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
         jRSeller.setForeground(new java.awt.Color(102, 102, 102));
@@ -306,10 +311,29 @@ public class UsuarioDialog extends javax.swing.JDialog {
         jLabel5.setText("Mais opções...");
         jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        jTNomeEditar.setBackground(new java.awt.Color(235, 235, 235));
+        jTNomeEditar.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTNomeEditar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTNomeEditar.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jTNomeEditar1.setBackground(new java.awt.Color(235, 235, 235));
+        jTNomeEditar1.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTNomeEditar1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTNomeEditar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addComponent(jLabel5))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(242, 242, 242)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(243, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -320,36 +344,27 @@ public class UsuarioDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jTEmail)
                     .addComponent(jPassword)
-                    .addComponent(jTName))
+                    .addComponent(jTNomeEditar)
+                    .addComponent(jTNomeEditar1))
                 .addGap(92, 92, 92))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(jLabel5))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(242, 242, 242)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(243, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(95, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jTNomeEditar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jTNomeEditar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRManager)
                     .addComponent(jRSeller))
@@ -519,7 +534,7 @@ public class UsuarioDialog extends javax.swing.JDialog {
     private javax.swing.JPasswordField jPassword;
     private javax.swing.JRadioButton jRManager;
     private javax.swing.JRadioButton jRSeller;
-    private javax.swing.JTextField jTEmail;
-    private javax.swing.JTextField jTName;
+    private javax.swing.JTextField jTNomeEditar;
+    private javax.swing.JTextField jTNomeEditar1;
     // End of variables declaration//GEN-END:variables
 }

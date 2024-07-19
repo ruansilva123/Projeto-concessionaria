@@ -67,12 +67,6 @@ public class Produto extends javax.swing.JFrame {
                     );
                     inserirNaTabela(produto);
                 }
-                if (tabela.getRowCount() < 25){
-                    int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
-                    tabela.setRowCount(numTableRows);
-                } else {
-                    tabela.setRowCount(tabela.getRowCount());
-                }
                 rs.close();
                 connection.close();
             } catch (SQLException erro) {
@@ -98,6 +92,12 @@ public class Produto extends javax.swing.JFrame {
             produto.getKmProduto(),
             produto.getAnoProduto()
         });
+        if (tabela.getRowCount() < 25){
+            int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+            tabela.setRowCount(numTableRows);
+        } else {
+            tabela.setRowCount(tabela.getRowCount());
+        }
     }
     
     private void initTable() {
