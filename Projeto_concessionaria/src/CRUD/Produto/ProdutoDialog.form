@@ -98,26 +98,26 @@
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="35" max="32767" attributes="0"/>
+                      <EmptySpace pref="34" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jBSalvarDialog" min="-2" pref="90" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
+                          </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jTNomeEditar" min="-2" pref="240" max="-2" attributes="0"/>
                                   <Component id="jLNome" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLMarca" min="-2" max="-2" attributes="0"/>
                                   <Component id="jTMarcaEditar" min="-2" pref="240" max="-2" attributes="0"/>
-                                  <Component id="jTValorUnitREditar" min="-2" pref="240" max="-2" attributes="0"/>
+                                  <Component id="jTValorUnitEditar" min="-2" pref="240" max="-2" attributes="0"/>
                                   <Component id="jLValorUnit" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLKm" min="-2" max="-2" attributes="0"/>
                                   <Component id="jTKmEditar" min="-2" pref="240" max="-2" attributes="0"/>
                                   <Component id="jLAno" min="-2" max="-2" attributes="0"/>
                                   <Component id="jTAnoEditar" min="-2" pref="240" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jBSalvarDialog" min="-2" pref="90" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -128,7 +128,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="jLCampoDeEdicao" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
@@ -148,7 +148,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="20" pref="20" max="-2" attributes="0"/>
-                              <Component id="jTValorUnitREditar" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTValorUnitEditar" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLValorUnit" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -168,7 +168,7 @@
                               <Component id="jTAnoEditar" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="82" max="32767" attributes="0"/>
+                      <EmptySpace pref="73" max="32767" attributes="0"/>
                       <Component id="jBSalvarDialog" min="-2" pref="40" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   </Group>
@@ -259,7 +259,7 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLValorUnitMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTValorUnitREditar">
+            <Component class="javax.swing.JTextField" name="jTValorUnitEditar">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="eb" green="eb" red="eb" type="rgb"/>
