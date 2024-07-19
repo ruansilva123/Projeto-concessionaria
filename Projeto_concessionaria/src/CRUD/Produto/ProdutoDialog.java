@@ -106,18 +106,18 @@ public class ProdutoDialog extends javax.swing.JDialog {
     private void deletar(){
         if(bd.getConnection()){
             try{
-                String query = "delete from produto where id_produto = ?";
+                String query = "DELETE FROM produto WHERE id_produto = ?";
                 PreparedStatement smtp = bd.connection.prepareStatement(query);
                 String index = (String)jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
                 System.out.println(index);
                 smtp.setString(1, index);
-                int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o cliente? ", "Confirmação ", JOptionPane.YES_NO_OPTION);
+                int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o produto? ", "Confirmação ", JOptionPane.YES_NO_OPTION);
                 if(opcao == JOptionPane.YES_OPTION){
                     int resultado = smtp.executeUpdate();
                     if(resultado>0){
-                        JOptionPane.showMessageDialog(null, "Cliente deletado com sucesso! ");
+                        JOptionPane.showMessageDialog(null, "Produto deletado com sucesso! ");
                     }else{
-                        JOptionPane.showMessageDialog(null, "Não foi possível remover o cliente! ");
+                        JOptionPane.showMessageDialog(null, "Não foi possível remover o Produto! ");
                     }
                     smtp.close();
                     bd.connection.close();
@@ -651,7 +651,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jBSalvarDialogActionPerformed
 
     private void jBDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeletarActionPerformed
-        // TODO add your handling code here:
+        deletar();        // TODO add your handling code here:
     }//GEN-LAST:event_jBDeletarActionPerformed
 
     private void jBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditarActionPerformed

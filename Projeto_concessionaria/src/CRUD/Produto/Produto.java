@@ -595,7 +595,8 @@ public class Produto extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel10MouseClicked
 
     private void jLMaisOpcoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLMaisOpcoesMouseClicked
-        // TODO add your handling code here:
+        ProdutoDialog crudProduto = new ProdutoDialog(null,false);
+        AlterPage.alterPage(user.getIsManager(), this, crudProduto);        // TODO add your handling code here:
     }//GEN-LAST:event_jLMaisOpcoesMouseClicked
 
     private void jLAnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLAnoMouseClicked
