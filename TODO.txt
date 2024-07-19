@@ -9,3 +9,4 @@ FEATURES PENDENTES:
 	- Fazer aba de estoque;
 	- Gerar nota Fiscal pós venda;
 	- Colocar visualização geral de dados e dashboard na home;
+	- Bloquear campo janelas anteriores até o popup ser fechado - EstoqueDialog e EditaEstoque
