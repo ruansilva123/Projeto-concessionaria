@@ -23,6 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import UTILS.User;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 /**
  *
  * @author moc3jvl
@@ -45,6 +47,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         initTable();
         setTable();
+        initSearchListener();
     }
 
     
@@ -73,12 +76,12 @@ public class ProdutoDialog extends javax.swing.JDialog {
                     );
                     inserirNaTabela(produto);
                 }
-                if (tabela.getRowCount() < 25){
+                /* if (tabela.getRowCount() < 25){
                     int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
                     tabela.setRowCount(numTableRows);
                 } else {
                     tabela.setRowCount(tabela.getRowCount());
-                }
+                } */
                 rs.close();
                 connection.close();
             } catch (SQLException erro) {
@@ -104,6 +107,12 @@ public class ProdutoDialog extends javax.swing.JDialog {
             produto.getKmProduto(),
             produto.getAnoProduto()
         });
+        if (tabela.getRowCount() < 25){
+            int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+            tabela.setRowCount(numTableRows);
+        } else {
+            tabela.setRowCount(tabela.getRowCount());
+        }
     }
     
     
@@ -183,6 +192,59 @@ public class ProdutoDialog extends javax.swing.JDialog {
                 bd.connection.close();
             }catch(SQLException e){
                 JOptionPane.showMessageDialog(null, "Erro no SQL: "+e.getMessage());
+            }
+        }
+    }
+    
+    
+    private void initSearchListener() {
+        jTPesquisaDialog.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+        });
+    }
+    
+    
+    private void pesquisar() {
+        if (bd.getConnection()) {
+            try {
+                connection = bd.connection;
+                String pesquisa = jTPesquisaDialog.getText();
+                String query = "SELECT * FROM produto WHERE nome_produto LIKE ? OR marca_produto LIKE ?";
+                PreparedStatement searchStatement = connection.prepareStatement(query);
+                searchStatement.setString(1, "%" + pesquisa + "%");
+                searchStatement.setString(2, "%" + pesquisa + "%");
+                rs = searchStatement.executeQuery();
+                DefaultTableModel tabela = (DefaultTableModel) jTabelaProdutosDialog.getModel();
+                initTable();
+                while (rs.next()) {
+                    ClasseProduto produto = new ClasseProduto(
+                        rs.getInt("id_produto"),
+                        rs.getString("nome_produto"),
+                        rs.getString("marca_produto"),
+                        rs.getDouble("valor_unitario_produto"),
+                        rs.getInt("km_produto"),
+                        rs.getInt("ano_produto")
+                    );
+                    inserirNaTabela(produto);
+                }
+                rs.close();
+                searchStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao pesquisar: " + e.toString());
             }
         }
     }
@@ -752,6 +814,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLCampoDeEdicaoMouseClicked
 
+    
     /**
      * @param args the command line arguments
      */
