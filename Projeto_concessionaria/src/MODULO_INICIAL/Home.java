@@ -4,6 +4,7 @@
  */
 package MODULO_INICIAL;
 
+import CRUD.Produto.Produto;
 import CRUD.*;
 import UTILS.LogoutSystem;
 import UTILS.User;

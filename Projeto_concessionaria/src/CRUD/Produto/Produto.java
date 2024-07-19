@@ -2,8 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package CRUD;
+package CRUD.Produto;
 
+import CRUD.ClienteDialog;
+import CRUD.EstoqueDialog;
+import CRUD.FornecedorDialog;
+import CRUD.UsuarioDialog;
+import CRUD.VendasDialog;
 import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import UTILS.LogoutSystem;
@@ -17,7 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import UTILS.User;
-import UTILS.ClasseProduto;
 
 
 public class Produto extends javax.swing.JFrame {
@@ -26,6 +30,23 @@ public class Produto extends javax.swing.JFrame {
     Connection connection;
     ResultSet rs;
     PreparedStatement getProdutos;
+    
+    
+    public Produto(User user) {
+        this.user = user;
+        initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
+        setTable();
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeResources();
+                System.exit(0);
+            }
+        });
+     }
+    
     
     public void setTable() {
         if (bd.getConnection()) {
@@ -107,23 +128,6 @@ public class Produto extends javax.swing.JFrame {
             }
         }
     }
-
-    
-    
-    public Produto(User user) {
-        this.user = user;
-        initComponents();
-        setResizable(false);
-        setLocationRelativeTo(null);
-        setTable();
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                closeResources();
-                System.exit(0);
-            }
-        });
-     }
     
     private void closeResources() {
         try {
@@ -545,14 +549,11 @@ public class Produto extends javax.swing.JFrame {
                 Integer.parseInt(jTKm.getText()),
                 Integer.parseInt(jTAno.getText())
         );
+        
         SalvarProduto(produto); 
         initTable();
         setTable();
     }//GEN-LAST:event_jBSalvarActionPerformed
-
-    private void jTKmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTKmActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTKmActionPerformed
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
         VendasDialog vendas = new VendasDialog(null, false, user);
@@ -589,33 +590,37 @@ public class Produto extends javax.swing.JFrame {
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel18MouseClicked
 
-    private void jLMaisOpcoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLMaisOpcoesMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLMaisOpcoesMouseClicked
-
     private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabel10MouseClicked
 
-    private void jLNomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLNomeMouseClicked
+    private void jLMaisOpcoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLMaisOpcoesMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLNomeMouseClicked
+    }//GEN-LAST:event_jLMaisOpcoesMouseClicked
 
-    private void jLMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLMarcaMouseClicked
+    private void jLAnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLAnoMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLMarcaMouseClicked
+    }//GEN-LAST:event_jLAnoMouseClicked
 
-    private void jLValorUnitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLValorUnitMouseClicked
+    private void jTKmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTKmActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLValorUnitMouseClicked
+    }//GEN-LAST:event_jTKmActionPerformed
 
     private void jLKmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLKmMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLKmMouseClicked
 
-    private void jLAnoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLAnoMouseClicked
+    private void jLValorUnitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLValorUnitMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLAnoMouseClicked
+    }//GEN-LAST:event_jLValorUnitMouseClicked
+
+    private void jLMarcaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLMarcaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLMarcaMouseClicked
+
+    private void jLNomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLNomeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLNomeMouseClicked
 
     /**
      * @param args the command line arguments

@@ -4,6 +4,7 @@
  */
 package CRUD;
 
+import CRUD.Produto.Produto;
 import MODULO_INICIAL.Home;
 import UTILS.DataBase;
 import javax.swing.JOptionPane;
