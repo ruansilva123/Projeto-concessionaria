@@ -14,8 +14,8 @@ public class DataBase {
     private final String dbName = "projeto_concessionaria"; //insert database name
     private final String local = "jdbc:mysql://localhost:3306/"+dbName;
     private final String login = "root"; //insert login name
-    //    private final String password = "root"; //insert login password
-    private final String password = "zyhua1U#oyox"; //insert login password;;
+    // private final String password = "root"; //insert login password;
+    private final String password = "zyhua1U#oyox"; //insert login password;
     
     public boolean getConnection(){
         try{
