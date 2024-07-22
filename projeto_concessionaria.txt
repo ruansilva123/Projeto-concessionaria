@@ -82,7 +82,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- Table `projeto_concessionaria`.`entrada`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`entrada` (
-  `id_entrada` INT NOT NULL,
+  `id_entrada` INT NOT NULL AUTO_INCREMENT,
   `estoque_id_estoque` INT NOT NULL,
   `fornecedor_id_fornecedor` INT NOT NULL,
   `quantidade_entrada` INT NOT NULL,
