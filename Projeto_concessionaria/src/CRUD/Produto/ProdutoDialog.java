@@ -725,7 +725,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        VendasDialog vendas = new VendasDialog(null, false, user);
+        VendasDialog vendas = new VendasDialog(null, false, user, null);
         AlterPage.alterPage(user.getIsSeller(), this, vendas);
     }//GEN-LAST:event_jLabel2MouseClicked
 
