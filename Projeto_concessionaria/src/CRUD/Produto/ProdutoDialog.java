@@ -4,7 +4,9 @@
  */
 package CRUD.Produto;
 
-import CRUD.ClienteDialog;
+import CRUD.Cliente.AdicionarClientes;
+import CRUD.Cliente.ClasseCliente;
+import CRUD.Cliente.ClienteDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.FornecedorDialog;
 import CRUD.Produto.ClasseProduto;
@@ -724,8 +726,11 @@ public class ProdutoDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        VendasDialog vendas = new VendasDialog(null, false, user, null);
-        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+        AdicionarClientes buscarClientes = new AdicionarClientes(null, true, user);
+        buscarClientes.setVisible(true);
+        ClasseCliente cliente = buscarClientes.getClienteSelecionado();
+        buscarClientes.dispose();
+        VendasDialog vendas = new VendasDialog(null, false, user, null, cliente);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked

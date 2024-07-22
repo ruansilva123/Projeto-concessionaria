@@ -11,13 +11,15 @@ package CRUD.Venda;
 public class ClasseVenda {
     private int idVenda;
     private java.sql.Date dataVenda;
+    private java.math.BigDecimal totalVenda;
     private java.math.BigDecimal comissaoVenda;
     private int clienteIdCliente;
     private int usuarioIdUsuario;
 
-    public ClasseVenda(int idVenda, java.sql.Date dataVenda, java.math.BigDecimal comissaoVenda, int clienteIdCliente, int usuarioIdUsuario) {
+    public ClasseVenda(int idVenda, java.sql.Date dataVenda, java.math.BigDecimal totalVenda, java.math.BigDecimal comissaoVenda, int clienteIdCliente, int usuarioIdUsuario) {
         this.idVenda = idVenda;
         this.dataVenda = dataVenda;
+        this.totalVenda = totalVenda;
         this.comissaoVenda = comissaoVenda;
         this.clienteIdCliente = clienteIdCliente;
         this.usuarioIdUsuario = usuarioIdUsuario;
@@ -46,6 +48,14 @@ public class ClasseVenda {
 
     public void setComissaoVenda(java.math.BigDecimal comissaoVenda) {
         this.comissaoVenda = comissaoVenda;
+    }
+    
+    public java.math.BigDecimal getTotalVenda() {
+        return totalVenda;
+    }
+
+    public void setTotalVenda(java.math.BigDecimal totalVenda) {
+        this.totalVenda = totalVenda;
     }
 
     public int getClienteIdCliente() {

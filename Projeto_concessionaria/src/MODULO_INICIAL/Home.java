@@ -4,10 +4,13 @@
  */
 package MODULO_INICIAL;
 
+import CRUD.Cliente.ClienteDialog;
 import CRUD.Venda.VendasDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.Produto.Produto;
 import CRUD.*;
+import CRUD.Cliente.AdicionarClientes;
+import CRUD.Cliente.ClasseCliente;
 import UTILS.LogoutSystem;
 import UTILS.User;
 import UTILS.AlterPage;
@@ -212,8 +215,11 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel16MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        VendasDialog vendas = new VendasDialog(this, false, user, null);
-        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+        AdicionarClientes buscarClientes = new AdicionarClientes(null, true, user);
+        buscarClientes.setVisible(true);
+        ClasseCliente cliente = buscarClientes.getClienteSelecionado();
+        buscarClientes.dispose();
+        VendasDialog vendas = new VendasDialog(null, false, user, null, cliente);
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked

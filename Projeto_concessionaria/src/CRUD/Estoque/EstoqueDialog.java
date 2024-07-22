@@ -1,10 +1,12 @@
 package CRUD.Estoque;
 
+import CRUD.Cliente.AdicionarClientes;
+import CRUD.Cliente.ClasseCliente;
 import CRUD.Produto.Produto;
 import MODULO_INICIAL.Home;
 import UTILS.LogoutSystem;
 import UTILS.User;
-import CRUD.ClienteDialog;
+import CRUD.Cliente.ClienteDialog;
 import CRUD.FornecedorDialog;
 import CRUD.UsuarioDialog;
 import CRUD.Venda.VendasDialog;
@@ -544,8 +546,11 @@ public class EstoqueDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        VendasDialog vendas = new VendasDialog(null, false, user, null);
-        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+        AdicionarClientes buscarClientes = new AdicionarClientes(null, true, user);
+        buscarClientes.setVisible(true);
+        ClasseCliente cliente = buscarClientes.getClienteSelecionado();
+        buscarClientes.dispose();
+        VendasDialog vendas = new VendasDialog(null, false, user, null, cliente);
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked

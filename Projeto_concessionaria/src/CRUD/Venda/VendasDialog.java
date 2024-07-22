@@ -4,8 +4,9 @@
  */
 package CRUD.Venda;
 
-import CRUD.ClienteDialog;
-import CRUD.ClienteDialog;
+import CRUD.Cliente.ClasseCliente;
+import CRUD.Cliente.ClienteDialog;
+import CRUD.Cliente.ClienteDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.FornecedorDialog;
 import CRUD.FornecedorDialog;
@@ -34,8 +35,9 @@ public class VendasDialog extends javax.swing.JDialog {
     DataBase bd = new DataBase();
     Connection connection;
     ResultSet rs;
+    ClasseCliente cliente;
 
-    public VendasDialog(java.awt.Frame parent, boolean modal, User user, ClasseProduto produto) {
+    public VendasDialog(java.awt.Frame parent, boolean modal, User user, ClasseProduto produto, ClasseCliente cliente) {
         super(parent, modal);
         this.user = user;
         initComponents();
@@ -45,6 +47,7 @@ public class VendasDialog extends javax.swing.JDialog {
             inserirNaTabela(produto);
             atualizarTotal();
         }
+        this.cliente = cliente;
     }
 
     
@@ -89,22 +92,27 @@ public class VendasDialog extends javax.swing.JDialog {
     private void cadastrarVenda() {
         if (bd.getConnection()) {
             try {
-                String query = "INSERT venda(cliente_id_cliente,total_venda) VALUES(?,?)";
+                this.connection = bd.connection;
+                String query = "INSERT venda(cliente_id_cliente,total_venda,usuario_id_usuario) VALUES(?,?,?)";
                 PreparedStatement smtp = connection.prepareStatement(query);
-                // smtp.setString(1, jTIdCliente.getText());
+                smtp.setInt(1, cliente.getIdCliente());
                 
                 double total = 0.0;
                 for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
-                    double valorUnitario = (double) jTabelaVendasDialog.getValueAt(i, 5);
-                    total += valorUnitario;
+                    if (jTabelaVendasDialog.getValueAt(i, 3) != null) {
+                        double valorUnitario = (double) jTabelaVendasDialog.getValueAt(i, 3);
+                        total += valorUnitario;
+                    }
                 }
                 smtp.setDouble(2, total);
+                smtp.setInt(3, user.getIdUser());
 
                 smtp.executeUpdate();
                 JOptionPane.showMessageDialog(null, "dados gravados");
                 smtp.close();
                 connection.close();
             } catch (SQLException erro) {
+                System.out.println(erro.toString());
                 JOptionPane.showMessageDialog(null, "erro de gravação no Banco:" + erro.toString());
             }
         }
@@ -124,37 +132,53 @@ public class VendasDialog extends javax.swing.JDialog {
     
     
     private void atualizarTotal() {
-    try {
-        double total = 0.0;
-        for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
-            Object valorUnitarioObj = jTabelaVendasDialog.getValueAt(i, 3);
-            if (valorUnitarioObj != null) {
-                double valorUnitario = (double) valorUnitarioObj;
-                total += valorUnitario;
+        try {
+            double valorTotalAtual = 0.0;
+            try {
+                String valorAtualTexto = jLValorTotal.getText();
+                if (valorAtualTexto != null && !valorAtualTexto.isEmpty()) {
+                    valorTotalAtual = Double.parseDouble(valorAtualTexto);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Erro ao converter o valor atual do jLValorTotal para double: " + e.getMessage());
             }
+            double novoTotal = 0.0;
+            for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
+                Object valorUnitarioObj = jTabelaVendasDialog.getValueAt(i, 3);
+                if (valorUnitarioObj != null) {
+                    try {
+                        double valorUnitario = Double.parseDouble(valorUnitarioObj.toString());
+                        novoTotal += valorUnitario;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erro ao converter o valor da tabela para double: " + valorUnitarioObj);
+                    }
+                }
+            }
+            double totalFinal = valorTotalAtual + novoTotal;
+            System.out.println(totalFinal);
+            jLValorTotal.setText(String.valueOf(totalFinal));
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        jLValorTotal.setText(String.valueOf(total));
-    } catch (Exception e) {
-        System.out.println(e);
     }
-}
     
     
-    /* private void excluirProdutoDaTabela(){
+    private void removerProdutoDaTabela() {
         DefaultTableModel tabela = (DefaultTableModel) jTabelaVendasDialog.getModel();
-        if (tabela.getSelectedRow() != -1) {
-            int rowIndex = tabela.getSelectedRow();
-            Object indexObj = tabela.getValueAt(rowIndex, 0);
-            if (indexObj != null) {
-                int index = Integer.parseInt(indexObj.toString());
-                tabela.removeRow(rowIndex);
-            } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível obter o índice da linha selecionada.");
-            }
+        int selectedRow = jTabelaVendasDialog.getSelectedRow();
+        if (selectedRow != -1) {
+            tabela.removeRow(selectedRow);
+            atualizarTotal();
         } else {
-            JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada para exclusão.");
+            JOptionPane.showMessageDialog(this, "Selecione um produto para remover.");
         }
-    } */
+        if (tabela.getRowCount() < 25){
+            int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
+            tabela.setRowCount(numTableRows);
+        } else {
+            tabela.setRowCount(tabela.getRowCount());
+        }
+    }
     
     
     @SuppressWarnings("unchecked")
@@ -180,13 +204,13 @@ public class VendasDialog extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabelaVendasDialog = new javax.swing.JTable();
         jBCompletarVendas = new javax.swing.JButton();
-        JBCancelarDialog = new javax.swing.JButton();
-        jBAdicionarProduto1 = new javax.swing.JButton();
+        jBAdicionarProduto = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jLTotal = new javax.swing.JLabel();
+        jBRemoverDaTabela = new javax.swing.JButton();
+        jBLimpar = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         jLValorTotal = new javax.swing.JLabel();
-        jBAdicionarProduto2 = new javax.swing.JButton();
-        jBAdicionarProduto3 = new javax.swing.JButton();
+        jLMaisOpcoes = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -397,20 +421,14 @@ public class VendasDialog extends javax.swing.JDialog {
             }
         });
 
-        JBCancelarDialog.setBackground(new java.awt.Color(204, 204, 204));
-        JBCancelarDialog.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        JBCancelarDialog.setForeground(new java.awt.Color(102, 102, 102));
-        JBCancelarDialog.setText("Cancelar");
-        JBCancelarDialog.setBorder(null);
-
-        jBAdicionarProduto1.setBackground(new java.awt.Color(10, 60, 150));
-        jBAdicionarProduto1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jBAdicionarProduto1.setForeground(new java.awt.Color(255, 255, 255));
-        jBAdicionarProduto1.setText("Add");
-        jBAdicionarProduto1.setBorder(null);
-        jBAdicionarProduto1.addActionListener(new java.awt.event.ActionListener() {
+        jBAdicionarProduto.setBackground(new java.awt.Color(10, 60, 150));
+        jBAdicionarProduto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jBAdicionarProduto.setForeground(new java.awt.Color(255, 255, 255));
+        jBAdicionarProduto.setText("Add Pr");
+        jBAdicionarProduto.setBorder(null);
+        jBAdicionarProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBAdicionarProduto1ActionPerformed(evt);
+                jBAdicionarProdutoActionPerformed(evt);
             }
         });
 
@@ -423,10 +441,30 @@ public class VendasDialog extends javax.swing.JDialog {
             }
         });
 
-        jLTotal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLTotal.setForeground(new java.awt.Color(153, 153, 153));
-        jLTotal.setText("Total:");
-        jLTotal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jBRemoverDaTabela.setBackground(new java.awt.Color(0, 51, 255));
+        jBRemoverDaTabela.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jBRemoverDaTabela.setForeground(new java.awt.Color(255, 255, 255));
+        jBRemoverDaTabela.setText("Remove");
+        jBRemoverDaTabela.setBorder(null);
+        jBRemoverDaTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBRemoverDaTabelaActionPerformed(evt);
+            }
+        });
+
+        jBLimpar.setBackground(new java.awt.Color(0, 51, 204));
+        jBLimpar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jBLimpar.setForeground(new java.awt.Color(255, 255, 255));
+        jBLimpar.setText("Clear");
+        jBLimpar.setBorder(null);
+        jBLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBLimparActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
         jLValorTotal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLValorTotal.setForeground(new java.awt.Color(153, 153, 153));
@@ -438,27 +476,27 @@ public class VendasDialog extends javax.swing.JDialog {
             }
         });
 
-        jBAdicionarProduto2.setBackground(new java.awt.Color(0, 51, 255));
-        jBAdicionarProduto2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jBAdicionarProduto2.setForeground(new java.awt.Color(255, 255, 255));
-        jBAdicionarProduto2.setText("Delete");
-        jBAdicionarProduto2.setBorder(null);
-        jBAdicionarProduto2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBAdicionarProduto2ActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLValorTotal)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLValorTotal)
+                .addContainerGap())
+        );
 
-        jBAdicionarProduto3.setBackground(new java.awt.Color(0, 51, 204));
-        jBAdicionarProduto3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jBAdicionarProduto3.setForeground(new java.awt.Color(255, 255, 255));
-        jBAdicionarProduto3.setText("Clear");
-        jBAdicionarProduto3.setBorder(null);
-        jBAdicionarProduto3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBAdicionarProduto3ActionPerformed(evt);
-            }
-        });
+        jLMaisOpcoes.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jLMaisOpcoes.setForeground(new java.awt.Color(102, 102, 102));
+        jLMaisOpcoes.setText("Mais opções...");
+        jLMaisOpcoes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -466,51 +504,45 @@ public class VendasDialog extends javax.swing.JDialog {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLMaisOpcoes)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(JBCancelarDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jLTotal)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLValorTotal))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBCompletarVendas, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
-                    .addComponent(jBAdicionarProduto1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBAdicionarProduto2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBAdicionarProduto3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(26, 26, 26))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel9))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 533, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(29, 29, 29)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jBCompletarVendas, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                            .addComponent(jBAdicionarProduto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBRemoverDaTabela, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBLimpar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jBCompletarVendas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBAdicionarProduto1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBAdicionarProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBAdicionarProduto2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBRemoverDaTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBAdicionarProduto3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jBLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(jLTotal)
-                            .addComponent(jLValorTotal))
-                        .addGap(23, 23, 23))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(JBCancelarDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(12, Short.MAX_VALUE))))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLMaisOpcoes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(43, 43, 43))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -529,7 +561,7 @@ public class VendasDialog extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(125, 125, 125)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 315, Short.MAX_VALUE))
+                .addGap(0, 313, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -544,7 +576,7 @@ public class VendasDialog extends javax.swing.JDialog {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -607,10 +639,10 @@ public class VendasDialog extends javax.swing.JDialog {
         atualizarTotal();
     }//GEN-LAST:event_jBCompletarVendasActionPerformed
 
-    private void jBAdicionarProduto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarProduto1ActionPerformed
+    private void jBAdicionarProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarProdutoActionPerformed
         AdicionarProduto();
         atualizarTotal();
-    }//GEN-LAST:event_jBAdicionarProduto1ActionPerformed
+    }//GEN-LAST:event_jBAdicionarProdutoActionPerformed
 
     private void jLabel9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MouseClicked
         // TODO add your handling code here:
@@ -620,13 +652,14 @@ public class VendasDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jLValorTotalMouseClicked
 
-    private void jBAdicionarProduto2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarProduto2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBAdicionarProduto2ActionPerformed
+    private void jBRemoverDaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRemoverDaTabelaActionPerformed
+        removerProdutoDaTabela();
+    }//GEN-LAST:event_jBRemoverDaTabelaActionPerformed
 
-    private void jBAdicionarProduto3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarProduto3ActionPerformed
+    private void jBLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLimparActionPerformed
         initTable();
-    }//GEN-LAST:event_jBAdicionarProduto3ActionPerformed
+        atualizarTotal();
+    }//GEN-LAST:event_jBLimparActionPerformed
 
     /**
      * @param args the command line arguments
@@ -659,7 +692,8 @@ public class VendasDialog extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 User user = new User(0,0,0,"No User");
-                VendasDialog dialog = new VendasDialog(new javax.swing.JFrame(), true, user, null);
+                ClasseCliente cliente = new ClasseCliente(0,"","","");
+                VendasDialog dialog = new VendasDialog(new javax.swing.JFrame(), true, user, null, cliente);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -672,12 +706,11 @@ public class VendasDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton JBCancelarDialog;
-    private javax.swing.JButton jBAdicionarProduto1;
-    private javax.swing.JButton jBAdicionarProduto2;
-    private javax.swing.JButton jBAdicionarProduto3;
+    private javax.swing.JButton jBAdicionarProduto;
     private javax.swing.JButton jBCompletarVendas;
-    private javax.swing.JLabel jLTotal;
+    private javax.swing.JButton jBLimpar;
+    private javax.swing.JButton jBRemoverDaTabela;
+    private javax.swing.JLabel jLMaisOpcoes;
     private javax.swing.JLabel jLValorTotal;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel18;
@@ -692,6 +725,7 @@ public class VendasDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;

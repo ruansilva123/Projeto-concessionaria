@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package CRUD;
+package CRUD.Cliente;
 
 import CRUD.Venda.VendasDialog;
 import CRUD.Estoque.EstoqueDialog;
@@ -14,7 +14,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import UTILS.LogoutSystem;
 import UTILS.User;
-import CRUD.*;
+import CRUD.FornecedorDialog;
+import CRUD.FornecedorDialog;
+import CRUD.UsuarioDialog;
+import CRUD.UsuarioDialog;
 import UTILS.AlterPage;
 
 
@@ -398,8 +401,11 @@ public class ClienteDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        VendasDialog vendas = new VendasDialog(null, false, user, null);
-        AlterPage.alterPage(user.getIsSeller(), this, vendas);
+        AdicionarClientes buscarClientes = new AdicionarClientes(null, true, user);
+        buscarClientes.setVisible(true);
+        ClasseCliente cliente = buscarClientes.getClienteSelecionado();
+        buscarClientes.dispose();
+        VendasDialog vendas = new VendasDialog(null, false, user, null, cliente);
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel12MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
