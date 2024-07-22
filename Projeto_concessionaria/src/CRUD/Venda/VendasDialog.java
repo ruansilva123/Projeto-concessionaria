@@ -28,6 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Statement;
 
         
 public class VendasDialog extends javax.swing.JDialog {
@@ -93,27 +94,69 @@ public class VendasDialog extends javax.swing.JDialog {
         if (bd.getConnection()) {
             try {
                 this.connection = bd.connection;
-                String query = "INSERT venda(cliente_id_cliente,total_venda,usuario_id_usuario) VALUES(?,?,?)";
-                PreparedStatement smtp = connection.prepareStatement(query);
-                smtp.setInt(1, cliente.getIdCliente());
-                
+                String queryVenda = "INSERT INTO venda(cliente_id_cliente, total_venda, usuario_id_usuario) VALUES(?, ?, ?)";
+                PreparedStatement stmtVenda = connection.prepareStatement(queryVenda, Statement.RETURN_GENERATED_KEYS);
+                stmtVenda.setInt(1, cliente.getIdCliente());
+
                 double total = 0.0;
                 for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
                     if (jTabelaVendasDialog.getValueAt(i, 3) != null) {
-                        double valorUnitario = (double) jTabelaVendasDialog.getValueAt(i, 3);
+                        double valorUnitario = Double.parseDouble(jTabelaVendasDialog.getValueAt(i, 3).toString());
                         total += valorUnitario;
                     }
                 }
-                smtp.setDouble(2, total);
-                smtp.setInt(3, user.getIdUser());
+                stmtVenda.setDouble(2, total);
+                stmtVenda.setInt(3, user.getIdUser());
 
-                smtp.executeUpdate();
-                JOptionPane.showMessageDialog(null, "dados gravados");
-                smtp.close();
+                int affectedRows = stmtVenda.executeUpdate();
+
+                if (affectedRows > 0) {
+                    ResultSet generatedKeys = stmtVenda.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idVenda = generatedKeys.getInt(1);
+                        String queryEstoque = "SELECT id_estoque FROM estoque WHERE Produto_id_produto = ?";
+                        String querySaida = "INSERT INTO saida(estoque_id_estoque, venda_id_venda, quantidade_saida, data_saida) VALUES(?, ?, ?, ?)";
+                        String queryVendaProduto = "INSERT INTO venda_has_produto(Venda_id_venda, Produto_id_produto, quantidade) VALUES(?, ?, ?)";
+                        PreparedStatement stmtSaida = connection.prepareStatement(querySaida);
+                        PreparedStatement stmtEstoque = connection.prepareStatement(queryEstoque);
+                        PreparedStatement stmtVendaProduto = connection.prepareStatement(queryVendaProduto);
+
+                        for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
+                            if (jTabelaVendasDialog.getValueAt(i, 3) != null) {
+                                int produtoId = Integer.parseInt(jTabelaVendasDialog.getValueAt(i, 0).toString());
+                                stmtEstoque.setInt(1, produtoId);
+                                ResultSet rsEstoque = stmtEstoque.executeQuery();
+                                if (rsEstoque.next()) {
+                                    int estoqueId = rsEstoque.getInt("id_estoque");
+                                    stmtSaida.setInt(1, estoqueId);
+                                    stmtSaida.setInt(2, idVenda);
+                                    stmtSaida.setInt(3, 1);
+                                    stmtSaida.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+                                    stmtSaida.executeUpdate();
+
+                                    int quantidade = 1;
+                                    stmtVendaProduto.setInt(1, idVenda);
+                                    stmtVendaProduto.setInt(2, produtoId);
+                                    stmtVendaProduto.setInt(3, quantidade);
+                                    stmtVendaProduto.executeUpdate();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Não há registro de todos os produtos no estoque.");
+                                    return;
+                                }
+                            }
+                        }
+
+                        JOptionPane.showMessageDialog(null, "Dados gravados com sucesso!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Falha ao gravar os dados na tabela venda.");
+                }
+
+                stmtVenda.close();
                 connection.close();
             } catch (SQLException erro) {
                 System.out.println(erro.toString());
-                JOptionPane.showMessageDialog(null, "erro de gravação no Banco:" + erro.toString());
+                JOptionPane.showMessageDialog(null, "Erro de gravação no Banco: " + erro.toString());
             }
         }
     }
@@ -154,9 +197,7 @@ public class VendasDialog extends javax.swing.JDialog {
                     }
                 }
             }
-            double totalFinal = valorTotalAtual + novoTotal;
-            System.out.println(totalFinal);
-            jLValorTotal.setText(String.valueOf(totalFinal));
+            jLValorTotal.setText(String.valueOf(novoTotal));
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -165,10 +206,10 @@ public class VendasDialog extends javax.swing.JDialog {
     
     private void removerProdutoDaTabela() {
         DefaultTableModel tabela = (DefaultTableModel) jTabelaVendasDialog.getModel();
+        double valorTotal = Double.parseDouble(jLValorTotal.getText());
         int selectedRow = jTabelaVendasDialog.getSelectedRow();
         if (selectedRow != -1) {
             tabela.removeRow(selectedRow);
-            atualizarTotal();
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um produto para remover.");
         }
@@ -654,6 +695,7 @@ public class VendasDialog extends javax.swing.JDialog {
 
     private void jBRemoverDaTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBRemoverDaTabelaActionPerformed
         removerProdutoDaTabela();
+        atualizarTotal();
     }//GEN-LAST:event_jBRemoverDaTabelaActionPerformed
 
     private void jBLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBLimparActionPerformed

@@ -15,6 +15,7 @@ import UTILS.AlterPage;
 import UTILS.DataBase;
 import UTILS.LogoutSystem;
 import UTILS.User;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -83,11 +84,15 @@ public class VerVendas extends javax.swing.JDialog {
                 tabela.removeRow(i);
             }
         }
+        BigDecimal comissao = new BigDecimal("0.0");
+        try{
+            comissao = venda.getComissaoVenda();
+        } catch(Exception erro){}
         tabela.addRow(new Object[]{
             venda.getIdVenda(),
             venda.getDataVenda(),
             venda.getTotalVenda(),
-            venda.getComissaoVenda() + " %",
+            comissao + " %",
             venda.getClienteIdCliente(),
             venda.getUsuarioIdUsuario()
         });
