@@ -48,6 +48,7 @@ public class VendasDialog extends javax.swing.JDialog {
     
     private void initTable() {
         DefaultTableModel tabela = (DefaultTableModel) jTabelaVendasDialog.getModel();
+        tabela.setRowCount(0);
         if (tabela.getRowCount() < 25){
             int numTableRows = tabela.getRowCount()+(25-tabela.getRowCount());
             tabela.setRowCount(numTableRows);
@@ -132,6 +133,23 @@ public class VendasDialog extends javax.swing.JDialog {
             System.out.println(e);
         }
     }
+    
+    
+    /* private void excluirProdutoDaTabela(){
+        DefaultTableModel tabela = (DefaultTableModel) jTabelaVendasDialog.getModel();
+        if (tabela.getSelectedRow() != -1) {
+            int rowIndex = tabela.getSelectedRow();
+            Object indexObj = tabela.getValueAt(rowIndex, 0);
+            if (indexObj != null) {
+                int index = Integer.parseInt(indexObj.toString());
+                tabela.removeRow(rowIndex);
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível obter o índice da linha selecionada.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada para exclusão.");
+        }
+    } */
     
     
     @SuppressWarnings("unchecked")
@@ -404,11 +422,6 @@ public class VendasDialog extends javax.swing.JDialog {
         jLTotal.setForeground(new java.awt.Color(153, 153, 153));
         jLTotal.setText("Total:");
         jLTotal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLTotal.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLTotalMouseClicked(evt);
-            }
-        });
 
         jLValorTotal.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLValorTotal.setForeground(new java.awt.Color(153, 153, 153));
@@ -607,7 +620,7 @@ public class VendasDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jBAdicionarProduto2ActionPerformed
 
     private void jBAdicionarProduto3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarProduto3ActionPerformed
-        // TODO add your handling code here:
+        initTable();
     }//GEN-LAST:event_jBAdicionarProduto3ActionPerformed
 
     /**
