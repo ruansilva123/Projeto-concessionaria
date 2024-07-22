@@ -19,6 +19,9 @@ import CRUD.*;
 import CRUD.Cliente.AdicionarClientes;
 import CRUD.Cliente.ClasseCliente;
 import UTILS.AlterPage;
+import java.awt.Component;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 
 public class UsuarioDialog extends javax.swing.JDialog {
@@ -69,6 +72,19 @@ public class UsuarioDialog extends javax.swing.JDialog {
         }
     }
     
+    private void limparCampos(){
+        Component[] componentes = jPanel2.getComponents();
+        for(Component componente : componentes){
+            if(componente instanceof JTextField){
+                JTextField campo = (JTextField)componente;
+                campo.setText("");
+            }
+            if(componente instanceof JRadioButton){
+                JRadioButton campoSelecao = (JRadioButton)componente;
+                campoSelecao.setSelected(false);
+            }
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -434,6 +450,7 @@ public class UsuarioDialog extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         registerUser();
+        limparCampos();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel21MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked

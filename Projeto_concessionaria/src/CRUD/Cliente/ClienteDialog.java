@@ -19,6 +19,8 @@ import CRUD.FornecedorDialog;
 import CRUD.UsuarioDialog;
 import CRUD.UsuarioDialog;
 import UTILS.AlterPage;
+import java.awt.Component;
+import javax.swing.JTextField;
 
 
 public class ClienteDialog extends javax.swing.JDialog {
@@ -50,6 +52,16 @@ public class ClienteDialog extends javax.swing.JDialog {
             }
         }else{
             JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    }
+    
+    private void limparCampos(){
+        Component[] componentes = jPanel3.getComponents();
+        for(Component componente : componentes){
+            if(componente instanceof JTextField){
+                JTextField campo = (JTextField)componente;
+                campo.setText("");
+            }
         }
     }
     
@@ -392,6 +404,7 @@ public class ClienteDialog extends javax.swing.JDialog {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         registerClient();
+        limparCampos();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked

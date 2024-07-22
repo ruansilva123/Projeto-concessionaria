@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
 
 
 public class EstoqueDialog extends javax.swing.JDialog {
@@ -34,6 +35,7 @@ public class EstoqueDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         resgatarTodosOsProdutos();
         resgatarTodosOsFornecedores();
+        inserirDadosNaTabela();
     }
     
     private void resgatarTodosOsProdutos(){
@@ -195,6 +197,47 @@ public class EstoqueDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
         }
     }
+    
+    private void inserirDadosNaTabela(){
+        if(db.getConnection()){
+            try{
+                String query = "select produto.nome_produto, estoque.quantidade_estoque, estoque.quantidade_maxima, estoque.quantidade_minima "
+                        + "from produto "
+                        + "inner join estoque on produto.id_produto = estoque.Produto_id_produto ";
+                PreparedStatement selectDatas = db.connection.prepareStatement(query);
+                ResultSet result = selectDatas.executeQuery();
+                DefaultTableModel table = (DefaultTableModel) jTable1.getModel();
+                table.setRowCount(0);
+                int rowCount = table.getRowCount();
+                for (int i = rowCount - 1; i >= 0; i--) {
+                    Object id = table.getValueAt(i, 0);
+                    if (id == null) {
+                        table.removeRow(i);
+                    }
+                }
+                while(result.next()){
+                    table.addRow(new Object[]{
+                        result.getString("produto.nome_produto"),
+                        result.getString("estoque.quantidade_estoque"),
+                        result.getString("estoque.quantidade_maxima"),
+                        result.getString("estoque.quantidade_minima"),
+                    });
+                }
+                if (table.getRowCount() < 25){
+                    int numTableRows = table.getRowCount()+(25-table.getRowCount());
+                    table.setRowCount(numTableRows);
+                } else {
+                    table.setRowCount(table.getRowCount());
+                }
+                selectDatas.close();
+                db.connection.close();
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    } 
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -698,6 +741,7 @@ public class EstoqueDialog extends javax.swing.JDialog {
 
     private void jBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarActionPerformed
         salvarNovaEntrada();
+        inserirDadosNaTabela();
     }//GEN-LAST:event_jBSalvarActionPerformed
 
     /**
