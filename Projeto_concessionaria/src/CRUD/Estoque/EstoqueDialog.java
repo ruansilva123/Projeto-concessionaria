@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
- */
 package CRUD.Estoque;
 
 import CRUD.Produto.Produto;
@@ -14,6 +10,7 @@ import CRUD.UsuarioDialog;
 import CRUD.Venda.VendasDialog;
 import UTILS.AlterPage;
 import UTILS.DataBase;
+import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
@@ -61,6 +58,32 @@ public class EstoqueDialog extends javax.swing.JDialog {
                 ResultSet result = selecionarTodosFornecedores.executeQuery();
                 while(result.next()){
                     jCFornecedor.addItem(result.getString("nome_fornecedor"));
+                }
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    }
+    
+    private void retornarProdutoDoEstoque(){
+        if(db.getConnection()){
+            try{
+                String produtoSelecionado = jCProduto.getSelectedItem().toString();
+                String query = "select estoque.quantidade_minima, estoque.quantidade_maxima "
+                        + "from produto "
+                        + "inner join estoque on produto.id_produto = estoque.Produto_id_produto "
+                        + "where nome_produto = ?";
+                PreparedStatement pegaDadosProduto = db.connection.prepareStatement(query);
+                pegaDadosProduto.setString(1, produtoSelecionado);
+                ResultSet result = pegaDadosProduto.executeQuery();
+                if(result.next()){
+                    jTQuantMax.setText(result.getString("estoque.quantidade_minima"));
+                    jTQuantMin.setText(result.getString("estoque.quantidade_maxima"));
+               }else{
+                    jTQuantMax.setText("");
+                    jTQuantMin.setText("");
                 }
             }catch(SQLException erro){
                 JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
@@ -550,7 +573,7 @@ public class EstoqueDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel18MouseClicked
 
     private void jCProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCProdutoActionPerformed
-        // TODO add your handling code here:
+        retornarProdutoDoEstoque();
     }//GEN-LAST:event_jCProdutoActionPerformed
 
     private void jLabel15MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel15MouseClicked
