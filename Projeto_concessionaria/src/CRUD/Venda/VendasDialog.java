@@ -127,18 +127,20 @@ public class VendasDialog extends javax.swing.JDialog {
                                 stmtEstoque.setInt(1, produtoId);
                                 ResultSet rsEstoque = stmtEstoque.executeQuery();
                                 if (rsEstoque.next()) {
-                                    int estoqueId = rsEstoque.getInt("id_estoque");
-                                    stmtSaida.setInt(1, estoqueId);
-                                    stmtSaida.setInt(2, idVenda);
-                                    stmtSaida.setInt(3, 1);
-                                    stmtSaida.setDate(4, new java.sql.Date(System.currentTimeMillis()));
-                                    stmtSaida.executeUpdate();
+                                    if (rsEstoque.getInt("Produto_id_produto") == produtoId){
+                                        int estoqueId = rsEstoque.getInt("id_estoque");
+                                        stmtSaida.setInt(1, estoqueId);
+                                        stmtSaida.setInt(2, idVenda);
+                                        stmtSaida.setInt(3, 1);
+                                        stmtSaida.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+                                        stmtSaida.executeUpdate();
 
-                                    int quantidade = 1;
-                                    stmtVendaProduto.setInt(1, idVenda);
-                                    stmtVendaProduto.setInt(2, produtoId);
-                                    stmtVendaProduto.setInt(3, quantidade);
-                                    stmtVendaProduto.executeUpdate();
+                                        int quantidade = 1;
+                                        stmtVendaProduto.setInt(1, idVenda);
+                                        stmtVendaProduto.setInt(2, produtoId);
+                                        stmtVendaProduto.setInt(3, quantidade);
+                                        stmtVendaProduto.executeUpdate();
+                                    }
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Não há registro de todos os produtos no estoque.");
                                     return;
