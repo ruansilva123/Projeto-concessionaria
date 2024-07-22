@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`cliente` (
   `cnh_cliente` VARCHAR(9) NULL DEFAULT NULL,
   PRIMARY KEY (`id_cliente`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 2
+AUTO_INCREMENT = 3
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -82,7 +82,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- Table `projeto_concessionaria`.`entrada`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`entrada` (
-  `id_entrada` INT NOT NULL AUTO_INCREMENT,
+  `id_entrada` INT NOT NULL,
   `estoque_id_estoque` INT NOT NULL,
   `fornecedor_id_fornecedor` INT NOT NULL,
   `quantidade_entrada` INT NOT NULL,
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`venda` (
     FOREIGN KEY (`usuario_id_usuario`)
     REFERENCES `projeto_concessionaria`.`usuario` (`id_usuario`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 6
+AUTO_INCREMENT = 8
 DEFAULT CHARACTER SET = utf8mb3;
 
 
@@ -181,6 +181,30 @@ CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`venda_has_produto` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb3;
 
+USE `projeto_concessionaria` ;
+
+-- -----------------------------------------------------
+-- function calcular_estoque
+-- -----------------------------------------------------
+
+DELIMITER $$
+USE `projeto_concessionaria`$$
+CREATE DEFINER=`root`@`localhost` FUNCTION `calcular_estoque`(estoque_id INT) RETURNS int
+    READS SQL DATA
+BEGIN 
+	DECLARE estoque_atual INT;
+    SELECT IFNULL(SUM(quantidade_entrada), 0) INTO estoque_atual
+    FROM entrada
+    WHERE estoque_id_estoque = estoque_id;
+    SET estoque_atual = estoque_atual - (
+		SELECT IFNULL(SUM(quantidade_saida), 0)
+        FROM saida
+        WHERE estoque_id_estoque = estoque_id
+    );
+    RETURN estoque_atual;
+END$$
+
+DELIMITER ;
 USE `projeto_concessionaria`;
 
 DELIMITER $$
@@ -205,6 +229,18 @@ FOR EACH ROW
 BEGIN
     IF NEW.data_venda IS NULL THEN
         SET NEW.data_venda = CURDATE();
+    END IF;
+END$$
+
+USE `projeto_concessionaria`$$
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `projeto_concessionaria`.`before_insert_saida`
+BEFORE INSERT ON `projeto_concessionaria`.`saida`
+FOR EACH ROW
+BEGIN
+    IF NEW.data_saida IS NULL THEN
+        SET NEW.data_saida = CURDATE();
     END IF;
 END$$
 
