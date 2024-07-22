@@ -82,7 +82,7 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- Table `projeto_concessionaria`.`entrada`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `projeto_concessionaria`.`entrada` (
-  `id_entrada` INT NOT NULL,
+  `id_entrada` INT NOT NULL AUTO_INCREMENT,
   `estoque_id_estoque` INT NOT NULL,
   `fornecedor_id_fornecedor` INT NOT NULL,
   `quantidade_entrada` INT NOT NULL,
@@ -187,10 +187,9 @@ USE `projeto_concessionaria` ;
 -- function calcular_estoque
 -- -----------------------------------------------------
 
-DELIMITER $$
-USE `projeto_concessionaria`$$
-CREATE DEFINER=`root`@`localhost` FUNCTION `calcular_estoque`(estoque_id INT) RETURNS int
-    READS SQL DATA
+DELIMITER //
+CREATE FUNCTION calcular_estoque(estoque_id INT) RETURNS INT
+READS SQL DATA
 BEGIN 
 	DECLARE estoque_atual INT;
     SELECT IFNULL(SUM(quantidade_entrada), 0) INTO estoque_atual
@@ -202,7 +201,35 @@ BEGIN
         WHERE estoque_id_estoque = estoque_id
     );
     RETURN estoque_atual;
-END$$
+END //
+DELIMITER ;
+ 
+DELIMITER //
+CREATE TRIGGER before_register_new_entrada
+AFTER INSERT ON entrada
+FOR EACH ROW 
+BEGIN 
+	DECLARE novo_estoque INT;
+    SET novo_estoque = calcular_estoque(NEW.estoque_id_estoque);
+    UPDATE estoque
+    SET quantidade_estoque = novo_estoque
+    WHERE id_estoque = NEW.estoque_id_estoque;
+END //
+DELIMITER ;
+ 
+DELIMITER //
+CREATE TRIGGER before_register_new_saida
+AFTER INSERT ON saida
+FOR EACH ROW
+BEGIN 
+	DECLARE novo_estoque INT;
+    SET novo_estoque = calcular_estoque(NEW.estoque_id_estoque);
+    UPDATE estoque
+    SET quantidade_estoque = novo_estoque
+    WHERE id_estoque = NEW.estoque_id_estoque;
+END //
+DELIMITER ;
+
 
 DELIMITER ;
 USE `projeto_concessionaria`;
@@ -250,3 +277,39 @@ DELIMITER ;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+USE projeto_concessionaria;
+
+INSERT INTO fornecedor(nome_fornecedor, email_fornecedor) 
+VALUES('MC Rian SP','ryan@gmail.com');
+
+INSERT INTO produto(nome_produto, marca_produto ,valor_unitario_produto, km_produto, ano_produto) 
+VALUES('cayenne','Porsche',300000,0,2024),
+('aventador','Lamborghini',1200000,0,2022);
+
+-- SELECT * FROM produto; 
+
+-- SELECT * FROM fornecedor;
+
+INSERT usuario(senha_usuario, email_usuario, nome_usuario, eh_gerente, eh_vendedor) 
+VALUES('dokasmn', 'doka@gmail.com', 'doka', true,true),
+('dokasm', 'doka2@gmail.com', 'doka', false, true),
+('dokas', 'doka3@gmail.com', 'doka', true, false);
+        
+-- SELECT * FROM cliente;
+
+-- SELECT * FROM venda;
+
+-- DROP DATABASE projeto_concessionaria;
+
+SELECT * FROM venda as vd
+inner join venda_has_produto as vp
+on vp.Venda_id_venda = vd.id_venda;
+
+SELECT * FROM entrada;
+
+SELECT * FROM saida;
+
+SELECT * FROM estoque;
