@@ -440,7 +440,7 @@ public class UsuarioDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel23MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        VendasDialog vendas = new VendasDialog(null, false, user);
+        VendasDialog vendas = new VendasDialog(null, false, user, null);
         AlterPage.alterPage(user.getIsSeller(), this, vendas);
     }//GEN-LAST:event_jLabel5MouseClicked
 
