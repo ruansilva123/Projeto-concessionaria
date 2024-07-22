@@ -12,16 +12,18 @@ import CRUD.UsuarioDialog;
 import CRUD.Venda.VendasDialog;
 import UTILS.AlterPage;
 import UTILS.DataBase;
-import com.mysql.cj.jdbc.PreparedStatementWrapper;
 import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 public class EstoqueDialog extends javax.swing.JDialog {
     private User user;
     private EditaEstoque editaEstoque;
+    private boolean produtoSemEstoque;
+    private int idProduto;
     
     DataBase db = new DataBase();
     
@@ -43,7 +45,8 @@ public class EstoqueDialog extends javax.swing.JDialog {
                 while(result.next()){
                     jCProduto.addItem(result.getString("nome_produto"));
                 }
-                //JOptionPane.showMessageDialog(null, "Nenhum produto cadastrado até o momento!");
+                selectAllProducts.close();
+                db.connection.close();
             }catch(SQLException erro){
                 JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
             }
@@ -55,12 +58,14 @@ public class EstoqueDialog extends javax.swing.JDialog {
     private void resgatarTodosOsFornecedores(){
         if(db.getConnection()){
             try{
-                String query = "select nome_fornecedor from fornecedor";
+                String query = "select id_fornecedor, nome_fornecedor from fornecedor";
                 PreparedStatement selecionarTodosFornecedores = db.connection.prepareStatement(query);
                 ResultSet result = selecionarTodosFornecedores.executeQuery();
                 while(result.next()){
                     jCFornecedor.addItem(result.getString("nome_fornecedor"));
                 }
+                selecionarTodosFornecedores.close();
+                db.connection.close();
             }catch(SQLException erro){
                 JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
             }
@@ -72,24 +77,120 @@ public class EstoqueDialog extends javax.swing.JDialog {
     private void retornarProdutoDoEstoque(){
         if(db.getConnection()){
             try{
-                String produtoSelecionado = jCProduto.getSelectedItem().toString();
-                String query = "select estoque.quantidade_minima, estoque.quantidade_maxima "
+                String query = "select produto.id_produto, estoque.quantidade_minima, estoque.quantidade_maxima "
                         + "from produto "
                         + "inner join estoque on produto.id_produto = estoque.Produto_id_produto "
                         + "where nome_produto = ?";
                 PreparedStatement pegaDadosProduto = db.connection.prepareStatement(query);
-                pegaDadosProduto.setString(1, produtoSelecionado);
+                pegaDadosProduto.setString(1, jCProduto.getSelectedItem().toString());
                 ResultSet result = pegaDadosProduto.executeQuery();
                 if(result.next()){
-                    jTQuantMax.setText(result.getString("estoque.quantidade_minima"));
-                    jTQuantMin.setText(result.getString("estoque.quantidade_maxima"));
+                    jTQuantMax.setText(result.getString("estoque.quantidade_maxima"));
+                    jTQuantMin.setText(result.getString("estoque.quantidade_minima"));
+                    produtoSemEstoque = false;
+                    idProduto = result.getInt("produto.id_produto");
                }else{
                     jTQuantMax.setText("");
                     jTQuantMin.setText("");
+                    String queryProduto = "select id_produto from produto where nome_produto = ?";
+                    PreparedStatement selectIdProduto = db.connection.prepareStatement(queryProduto);
+                    selectIdProduto.setString(1, jCProduto.getSelectedItem().toString());
+                    ResultSet rs = selectIdProduto.executeQuery();
+                    if(rs.next()){
+                        idProduto = rs.getInt("id_produto");
+                    }
+                    selectIdProduto.close();
+                    produtoSemEstoque = true;
                 }
+                pegaDadosProduto.close();
+                db.connection.close();
             }catch(SQLException erro){
                 JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    }
+    
+    private void salvarNovaEntrada(){
+        if(db.getConnection()){
+            try{
+                if(produtoSemEstoque){
+                    String queryEstoque = "insert estoque(quantidade_estoque, quantidade_minima, quantidade_maxima, Produto_id_produto) "
+                            + "values (?,?,?,?)";
+                    PreparedStatement insertEstoque = db.connection.prepareStatement(queryEstoque, Statement.RETURN_GENERATED_KEYS);
+                    insertEstoque.setString(1, "0");
+                    insertEstoque.setString(2, jTQuantMin.getText());
+                    insertEstoque.setString(3, jTQuantMax.getText());
+                    insertEstoque.setString(4, String.valueOf(idProduto));
+                    int linhasAfetadas = insertEstoque.executeUpdate();
+                    int idEstoque = 0;
+                    if(linhasAfetadas > 0){
+                        ResultSet chavesGeradas = insertEstoque.getGeneratedKeys();
+                        if(chavesGeradas.next()){
+                            idEstoque = chavesGeradas.getInt(1);
+                        }
+                    }
+                    insertEstoque.close();
+                    System.out.print(idEstoque);
+                    
+                    String queryFornecedor = "select id_fornecedor from fornecedor where nome_fornecedor = ?";
+                    PreparedStatement selectFornecedor = db.connection.prepareStatement(queryFornecedor);
+                    selectFornecedor.setString(1, jCFornecedor.getSelectedItem().toString());
+                    ResultSet result = selectFornecedor.executeQuery();
+                    int idFornecedor = 0;
+                    if(result.next()){
+                        idFornecedor = result.getInt("id_fornecedor");
+                    }
+                    selectFornecedor.close();
+                    
+                    //esta query está se repetindo, dá para jogar para um método
+                    //No momento está apenas cadastrando a data com o trigger
+                    String queryEntrada = "insert entrada(estoque_id_estoque, fornecedor_id_fornecedor, quantidade_entrada) values(?,?,?)";
+                    PreparedStatement insertEntrada = db.connection.prepareStatement(queryEntrada);
+                    insertEntrada.setString(1, String.valueOf(idEstoque));
+                    insertEntrada.setString(2, String.valueOf(idFornecedor));
+                    insertEntrada.setString(3, jTEntrada.getText());
+                    insertEntrada.executeUpdate();
+                    insertEntrada.close();
+                }else{
+                    String queryFornecedor = "select id_fornecedor from fornecedor where nome_fornecedor = ?";
+                    PreparedStatement selectFornecedor = db.connection.prepareStatement(queryFornecedor);
+                    selectFornecedor.setString(1, jCFornecedor.getSelectedItem().toString());
+                    ResultSet result = selectFornecedor.executeQuery();
+                    int idFornecedor = 0;
+                    if(result.next()){
+                        idFornecedor = result.getInt("id_fornecedor");
+                    }
+                    selectFornecedor.close();
+                    
+                    String queryEstoque = "select id_estoque from estoque where Produto_id_produto = ?";
+                    PreparedStatement selectEstoqueId = db.connection.prepareStatement(queryEstoque);
+                    selectEstoqueId.setString(1, String.valueOf(idProduto));
+                    ResultSet rs = selectEstoqueId.executeQuery();
+                    int idEstoque = 0;
+                    if(rs.next()){
+                        idEstoque = rs.getInt("id_estoque");
+                    }
+                    selectEstoqueId.close();
+                    
+                    //esta query está se repetindo, dá para jogar para um método
+                    //No momento está apenas cadastrando a data com o trigger
+                    String queryEntrada = "insert entrada(estoque_id_estoque, fornecedor_id_fornecedor, quantidade_entrada) values(?,?,?)";
+                    PreparedStatement insertEntrada = db.connection.prepareStatement(queryEntrada);
+                    insertEntrada.setString(1, String.valueOf(idEstoque));
+                    insertEntrada.setString(2, String.valueOf(idFornecedor));
+                    insertEntrada.setString(3, jTEntrada.getText());
+                    insertEntrada.executeUpdate();
+                    insertEntrada.close();
+                }
+                db.connection.close();
+                JOptionPane.showMessageDialog(null, "Entrada salva no sistema!");
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
+            }
+            jTEntrada.setText("");
+            jTDataEntrada.setText("");
         }else{
             JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
         }
@@ -407,6 +508,11 @@ public class EstoqueDialog extends javax.swing.JDialog {
         jBSalvar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jBSalvar.setForeground(new java.awt.Color(255, 255, 255));
         jBSalvar.setText("Salvar");
+        jBSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalvarActionPerformed(evt);
+            }
+        });
 
         jCProduto.setBackground(new java.awt.Color(235, 235, 235));
         jCProduto.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
@@ -589,6 +695,10 @@ public class EstoqueDialog extends javax.swing.JDialog {
             editaEstoque.toFront();
         }
     }//GEN-LAST:event_jLabel15MouseClicked
+
+    private void jBSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalvarActionPerformed
+        salvarNovaEntrada();
+    }//GEN-LAST:event_jBSalvarActionPerformed
 
     /**
      * @param args the command line arguments
