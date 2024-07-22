@@ -46,9 +46,12 @@ public class AdicionarProdutos extends javax.swing.JDialog {
     /**
      * Creates new form AdicionarProdutos
      */
-    public AdicionarProdutos(java.awt.Frame parent, boolean modal) {
+    public AdicionarProdutos(java.awt.Frame parent, boolean modal, User user) {
         super(parent, modal);
+        this.user = user;
         initComponents();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }
     
 
@@ -57,6 +60,7 @@ public class AdicionarProdutos extends javax.swing.JDialog {
         ClasseProduto produto = null;
         if(bd.getConnection()){
             try {
+                connection = bd.connection;
                 setModal(true);
                 getProduto = connection.prepareStatement(query);
                 getProduto.setString(1, jTId.getText());
@@ -82,7 +86,6 @@ public class AdicionarProdutos extends javax.swing.JDialog {
         }
         return produto;
     }
-    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -107,7 +110,12 @@ public class AdicionarProdutos extends javax.swing.JDialog {
         jButton1.setBackground(new java.awt.Color(10, 60, 150));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Editar ");
+        jButton1.setText("Salvar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTId.setBackground(new java.awt.Color(235, 235, 235));
         jTId.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
@@ -145,12 +153,12 @@ public class AdicionarProdutos extends javax.swing.JDialog {
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(73, 73, 73)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(89, Short.MAX_VALUE)
+                .addContainerGap(101, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -172,23 +180,28 @@ public class AdicionarProdutos extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 471, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+                .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        ClasseProduto produto = getProdutoSelecionado();
+        if (produto != null) {
+            VendasDialog vendas = new VendasDialog(null, true, user ,produto);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Produto não encontrado.");
+            this.dispose();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,7 +214,7 @@ public class AdicionarProdutos extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 User user = new User(0,0,0,"No User");
-                ProdutoDialog dialog = new ProdutoDialog(new javax.swing.JFrame(), true, user);
+                AdicionarProdutos dialog = new AdicionarProdutos(new javax.swing.JFrame(), true, user);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

@@ -9,6 +9,7 @@ import CRUD.ClienteDialog;
 import CRUD.Estoque.EstoqueDialog;
 import CRUD.FornecedorDialog;
 import CRUD.FornecedorDialog;
+import CRUD.Produto.AdicionarProdutos;
 import CRUD.Produto.ClasseProduto;
 import CRUD.Produto.Produto;
 import CRUD.Produto.ProdutoDialog;
@@ -42,6 +43,7 @@ public class VendasDialog extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         if (produto != null) {
             inserirNaTabela(produto);
+            atualizarTotal();
         }
     }
 
@@ -109,8 +111,8 @@ public class VendasDialog extends javax.swing.JDialog {
     }
 
     
-    /* private void AdicionarProduto() {
-        BuscarProdutos buscarProdutos = new BuscarProdutos(null, true);
+    private void AdicionarProduto() {
+        AdicionarProdutos buscarProdutos = new AdicionarProdutos(null, true, user);
         buscarProdutos.setVisible(true);
 
         ClasseProduto produto = buscarProdutos.getProdutoSelecionado();
@@ -118,21 +120,24 @@ public class VendasDialog extends javax.swing.JDialog {
             inserirNaTabela(produto);
         }
         buscarProdutos.dispose();
-    } */
+    }
     
     
     private void atualizarTotal() {
-        try {
-            double total = 0.0;
-            for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
-                double valorUnitario = (double) jTabelaVendasDialog.getValueAt(i, 2);
+    try {
+        double total = 0.0;
+        for (int i = 0; i < jTabelaVendasDialog.getRowCount(); i++) {
+            Object valorUnitarioObj = jTabelaVendasDialog.getValueAt(i, 3);
+            if (valorUnitarioObj != null) {
+                double valorUnitario = (double) valorUnitarioObj;
                 total += valorUnitario;
             }
-            jLValorTotal.setText(String.valueOf(total));
-        } catch (Exception e) {
-            System.out.println(e);
         }
+        jLValorTotal.setText(String.valueOf(total));
+    } catch (Exception e) {
+        System.out.println(e);
     }
+}
     
     
     /* private void excluirProdutoDaTabela(){
@@ -603,7 +608,7 @@ public class VendasDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jBCompletarVendasActionPerformed
 
     private void jBAdicionarProduto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarProduto1ActionPerformed
-        // AdicionarProduto();
+        AdicionarProduto();
         atualizarTotal();
     }//GEN-LAST:event_jBAdicionarProduto1ActionPerformed
 

@@ -117,7 +117,6 @@ public class ProdutoDialog extends javax.swing.JDialog {
                 PreparedStatement smtp = bd.connection.prepareStatement(query);
                 Object value = jTabelaProdutosDialog.getModel().getValueAt(jTabelaProdutosDialog.getSelectedRow(), 0);
                 String index = value.toString();
-                System.out.println(index);
                 smtp.setString(1, index);
                 int opcao = JOptionPane.showConfirmDialog(null, "Deseja excluir o produto?", "Confirmação", JOptionPane.YES_NO_OPTION);
                 if (opcao == JOptionPane.YES_OPTION) {
