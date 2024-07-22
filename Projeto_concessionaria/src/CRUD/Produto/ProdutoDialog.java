@@ -279,6 +279,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
         JBCancelarDialog = new javax.swing.JButton();
         jBDeletar = new javax.swing.JButton();
         jBEditar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -574,6 +575,11 @@ public class ProdutoDialog extends javax.swing.JDialog {
         );
 
         jPanel1.add(jPanelProdutosDialog, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, 750, 530));
+
+        jLabel8.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMGS/lupa.png"))); // NOI18N
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 50, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, 1220, 720));
 
@@ -875,6 +881,7 @@ public class ProdutoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelPesquisar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

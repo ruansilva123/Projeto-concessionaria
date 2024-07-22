@@ -4,7 +4,14 @@
  */
 package CRUD.Venda;
 
+import CRUD.Cliente.ClienteDialog;
+import CRUD.Estoque.EstoqueDialog;
+import CRUD.FornecedorDialog;
 import CRUD.Produto.ClasseProduto;
+import CRUD.Produto.Produto;
+import CRUD.UsuarioDialog;
+import MODULO_INICIAL.Home;
+import UTILS.AlterPage;
 import UTILS.DataBase;
 import UTILS.LogoutSystem;
 import UTILS.User;
@@ -12,6 +19,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -34,6 +44,7 @@ public class VerVendas extends javax.swing.JDialog {
         this.user = user;
         initTable();
         setTable();
+        initSearchListener();
     }
     
     public void setTable() {
@@ -76,7 +87,7 @@ public class VerVendas extends javax.swing.JDialog {
             venda.getIdVenda(),
             venda.getDataVenda(),
             venda.getTotalVenda(),
-            venda.getComissaoVenda(),
+            venda.getComissaoVenda() + " %",
             venda.getClienteIdCliente(),
             venda.getUsuarioIdUsuario()
         });
@@ -91,6 +102,100 @@ public class VerVendas extends javax.swing.JDialog {
     private void initTable() {
         DefaultTableModel tabela = (DefaultTableModel) jTabelaVerVendas.getModel();
         tabela.setRowCount(0);
+    }
+    
+    private void updateComissao(double comissao) {
+        if (bd.getConnection()) {
+            try {
+                String query = "UPDATE venda SET comissao_venda=? WHERE id_venda = ?";
+                PreparedStatement updateVenda = bd.connection.prepareStatement(query);
+                Object value = jTabelaVerVendas.getModel().getValueAt(jTabelaVerVendas.getSelectedRow(), 0);
+                String index = value.toString();
+                updateVenda.setDouble(1, comissao);
+                updateVenda.setString(2, index);
+
+                int opcao = JOptionPane.showConfirmDialog(null, "Deseja atualizar a comissão?", "Confirmação", JOptionPane.YES_NO_OPTION);
+                if (opcao == JOptionPane.YES_OPTION) {
+                    int resultado = updateVenda.executeUpdate();
+                    if (resultado > 0) {
+                        JOptionPane.showMessageDialog(null, "Comissão atualizada com sucesso!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Não foi possível atualizar a comissão!");
+                    }
+                    updateVenda.close();
+                    bd.connection.close();
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro no SQL: " + e.toString());
+            }
+        }
+    }
+    
+    
+    private void initSearchListener() {
+        jTPesquisaDialog.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                pesquisar();
+            }
+        });
+    }
+    
+    
+    private void pesquisar() {
+        if (bd.getConnection()) {
+            try {
+                connection = bd.connection;
+                String pesquisa = jTPesquisaDialog.getText();
+                String query = "SELECT * FROM venda WHERE data_venda LIKE ? OR cliente_id_cliente LIKE ? OR usuario_id_usuario LIKE ?";
+                PreparedStatement searchStatement = connection.prepareStatement(query);
+                searchStatement.setString(1, "%" + pesquisa + "%");
+                searchStatement.setString(2, "%" + pesquisa + "%");
+                searchStatement.setString(3, "%" + pesquisa + "%");
+                rs = searchStatement.executeQuery();
+                DefaultTableModel tabela = (DefaultTableModel) jTabelaVerVendas.getModel();
+                initTable();
+                while (rs.next()) {
+                    ClasseVenda venda = new ClasseVenda(
+                        rs.getInt("id_venda"),
+                        rs.getDate("data_venda"),
+                        rs.getBigDecimal("total_venda"),
+                        rs.getBigDecimal("comissao_venda"),
+                        rs.getInt("cliente_id_cliente"),
+                        rs.getInt("usuario_id_usuario")
+                    );
+                    inserirNaTabela(venda);
+                }
+                rs.close();
+                searchStatement.close();
+                connection.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao pesquisar: " + e.toString());
+            }
+        }
+    }
+    
+    
+    private void openAdicionarComissaoDialog() {
+        int selectedRow = jTabelaVerVendas.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(null, "Por favor, selecione uma venda para atualizar a comissão.");
+                return;
+            }
+        AdicionarComissao addComissao = new AdicionarComissao(null, true, user);
+        addComissao.setVisible(true);
+        double comissao = addComissao.getComissao();
+        updateComissao(comissao);
     }
 
     /**
@@ -114,12 +219,12 @@ public class VerVendas extends javax.swing.JDialog {
         jPanel6 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel7 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
         jBAdicionarComissao = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTabelaVerVendas = new javax.swing.JTable();
+        jTPesquisaDialog = new javax.swing.JTextField();
+        jLabelPesquisar = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -266,43 +371,6 @@ public class VerVendas extends javax.swing.JDialog {
 
         jLabel8.setText("Vendas");
 
-        jPanel7.setForeground(new java.awt.Color(0, 153, 255));
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-
-        jPanel5.setBackground(new java.awt.Color(10, 60, 150));
-        jPanel5.setForeground(new java.awt.Color(0, 153, 255));
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 390, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-
-        jLabel10.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel10.setText("Cadastrar Venda:");
-        jLabel10.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel10.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel10MouseClicked(evt);
-            }
-        });
-
         jBAdicionarComissao.setBackground(new java.awt.Color(0, 51, 204));
         jBAdicionarComissao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jBAdicionarComissao.setForeground(new java.awt.Color(255, 255, 255));
@@ -322,11 +390,35 @@ public class VerVendas extends javax.swing.JDialog {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Data", "Total", "Comissão", "Cliente", "Usuario"
+                "Id", "Data", "Total", "Comissão", "Cliente", "Vendedor"
             }
         ));
         jTabelaVerVendas.setSelectionForeground(new java.awt.Color(102, 102, 102));
         jScrollPane1.setViewportView(jTabelaVerVendas);
+
+        jTPesquisaDialog.setBackground(new java.awt.Color(235, 235, 235));
+        jTPesquisaDialog.setFont(new java.awt.Font("Yu Gothic Medium", 0, 12)); // NOI18N
+        jTPesquisaDialog.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTPesquisaDialog.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jTPesquisaDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTPesquisaDialogActionPerformed(evt);
+            }
+        });
+
+        jLabelPesquisar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabelPesquisar.setForeground(new java.awt.Color(153, 153, 153));
+        jLabelPesquisar.setText("Pesquisar");
+        jLabelPesquisar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabelPesquisar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelPesquisarMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Yu Gothic Medium", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMGS/lupa.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -334,34 +426,32 @@ public class VerVendas extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(223, 223, 223)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jBAdicionarComissao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 757, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(214, 214, 214)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBAdicionarComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(328, Short.MAX_VALUE))
+                        .addGap(23, 23, 23)
+                        .addComponent(jLabelPesquisar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTPesquisaDialog)
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(319, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel10)
-                .addGap(6, 6, 6)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(52, 52, 52)
+                .addContainerGap(70, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelPesquisar, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTPesquisaDialog, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(50, 50, 50)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 469, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(28, 28, 28)
                 .addComponent(jBAdicionarComissao, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addGap(82, 82, 82))
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -380,40 +470,53 @@ public class VerVendas extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        // TODO add your handling code here:
+        Produto produto = new Produto(user);
+        AlterPage.alterPage(user.getIsManager(), this, produto);
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel19MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel19MouseClicked
-        // TODO add your handling code here:
+        Home home = new Home(user);
+        this.dispose();
+        home.setVisible(true);
     }//GEN-LAST:event_jLabel19MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-        // TODO add your handling code here:
+        EstoqueDialog estoque = new EstoqueDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, estoque);
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        // TODO add your handling code here:
+        ClienteDialog cliente = new ClienteDialog(null, false, user);
+        AlterPage.alterPage(user.getIsSeller(), this, cliente);
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        // TODO add your handling code here:
+        FornecedorDialog fornecedor = new FornecedorDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, fornecedor);
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel7MouseClicked
-        // TODO add your handling code here:
+        UsuarioDialog usuario = new UsuarioDialog(null, false, user);
+        AlterPage.alterPage(user.getIsManager(), this, usuario);
     }//GEN-LAST:event_jLabel7MouseClicked
 
     private void jLabel18MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel18MouseClicked
         LogoutSystem.logoutSystem(this);
     }//GEN-LAST:event_jLabel18MouseClicked
 
-    private void jLabel10MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel10MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel10MouseClicked
-
     private void jBAdicionarComissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAdicionarComissaoActionPerformed
-        
+        openAdicionarComissaoDialog();
+        initTable();
+        setTable();
     }//GEN-LAST:event_jBAdicionarComissaoActionPerformed
+
+    private void jLabelPesquisarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelPesquisarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jLabelPesquisarMouseClicked
+
+    private void jTPesquisaDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTPesquisaDialogActionPerformed
+        pesquisar();   
+    }//GEN-LAST:event_jTPesquisaDialogActionPerformed
 
     /**
      * @param args the command line arguments
@@ -460,7 +563,7 @@ public class VerVendas extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAdicionarComissao;
-    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
@@ -470,12 +573,13 @@ public class VerVendas extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabelPesquisar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTPesquisaDialog;
     private javax.swing.JTable jTabelaVerVendas;
     // End of variables declaration//GEN-END:variables
+
 }
