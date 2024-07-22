@@ -32,6 +32,7 @@ public class EstoqueDialog extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         resgatarTodosOsProdutos();
+        resgatarTodosOsFornecedores();
     }
     
     private void resgatarTodosOsProdutos(){
@@ -41,9 +42,26 @@ public class EstoqueDialog extends javax.swing.JDialog {
                 PreparedStatement selectAllProducts = db.connection.prepareStatement(query);
                 ResultSet result = selectAllProducts.executeQuery();
                 while(result.next()){
-                    System.out.println(result.getString("nome_produto"));
+                    jCProduto.addItem(result.getString("nome_produto"));
                 }
                 //JOptionPane.showMessageDialog(null, "Nenhum produto cadastrado até o momento!");
+            }catch(SQLException erro){
+                JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Não foi possível realizar conexão com o banco!");
+        }
+    }
+    
+    private void resgatarTodosOsFornecedores(){
+        if(db.getConnection()){
+            try{
+                String query = "select nome_fornecedor from fornecedor";
+                PreparedStatement selecionarTodosFornecedores = db.connection.prepareStatement(query);
+                ResultSet result = selecionarTodosFornecedores.executeQuery();
+                while(result.next()){
+                    jCFornecedor.addItem(result.getString("nome_fornecedor"));
+                }
             }catch(SQLException erro){
                 JOptionPane.showMessageDialog(null, "Erro: "+erro.toString());
             }
