@@ -517,6 +517,11 @@ public class ProdutoDialog extends javax.swing.JDialog {
         JBCancelarDialog.setForeground(new java.awt.Color(102, 102, 102));
         JBCancelarDialog.setText("Cancelar");
         JBCancelarDialog.setBorder(null);
+        JBCancelarDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBCancelarDialogActionPerformed(evt);
+            }
+        });
 
         jBDeletar.setBackground(new java.awt.Color(204, 0, 0));
         jBDeletar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -817,6 +822,11 @@ public class ProdutoDialog extends javax.swing.JDialog {
     private void jLCampoDeEdicaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLCampoDeEdicaoMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jLCampoDeEdicaoMouseClicked
+
+    private void JBCancelarDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarDialogActionPerformed
+        Produto produto = new Produto(user);
+        AlterPage.alterPage(user.getIsManager(), this, produto);
+    }//GEN-LAST:event_JBCancelarDialogActionPerformed
 
     
     /**
